@@ -14,7 +14,252 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      experiences: {
+        Row: {
+          color: string | null
+          company: string
+          created_at: string
+          description: string | null
+          duration: string
+          experience_type: string | null
+          id: string
+          location: string | null
+          order_index: number | null
+          position: string
+          technologies: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          company: string
+          created_at?: string
+          description?: string | null
+          duration: string
+          experience_type?: string | null
+          id?: string
+          location?: string | null
+          order_index?: number | null
+          position: string
+          technologies?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          company?: string
+          created_at?: string
+          description?: string | null
+          duration?: string
+          experience_type?: string | null
+          id?: string
+          location?: string | null
+          order_index?: number | null
+          position?: string
+          technologies?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      posts: {
+        Row: {
+          category: string | null
+          content: string | null
+          created_at: string
+          excerpt: string | null
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          order_index: number | null
+          published: boolean | null
+          read_time: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          content?: string | null
+          created_at?: string
+          excerpt?: string | null
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          order_index?: number | null
+          published?: boolean | null
+          read_time?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          content?: string | null
+          created_at?: string
+          excerpt?: string | null
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          order_index?: number | null
+          published?: boolean | null
+          read_time?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          education: string | null
+          email_contact: string | null
+          id: string
+          location: string | null
+          updated_at: string
+          user_id: string
+          youtube_channel_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          education?: string | null
+          email_contact?: string | null
+          id?: string
+          location?: string | null
+          updated_at?: string
+          user_id: string
+          youtube_channel_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          education?: string | null
+          email_contact?: string | null
+          id?: string
+          location?: string | null
+          updated_at?: string
+          user_id?: string
+          youtube_channel_id?: string | null
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          created_at: string
+          demo_url: string | null
+          description: string | null
+          featured: boolean | null
+          github_forks: number | null
+          github_stars: number | null
+          github_url: string | null
+          id: string
+          image_url: string | null
+          order_index: number | null
+          status: string | null
+          technologies: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          demo_url?: string | null
+          description?: string | null
+          featured?: boolean | null
+          github_forks?: number | null
+          github_stars?: number | null
+          github_url?: string | null
+          id?: string
+          image_url?: string | null
+          order_index?: number | null
+          status?: string | null
+          technologies?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          demo_url?: string | null
+          description?: string | null
+          featured?: boolean | null
+          github_forks?: number | null
+          github_stars?: number | null
+          github_url?: string | null
+          id?: string
+          image_url?: string | null
+          order_index?: number | null
+          status?: string | null
+          technologies?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      videos: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration: string | null
+          id: string
+          likes: string | null
+          order_index: number | null
+          published_at: string | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          views: string | null
+          youtube_id: string | null
+          youtube_url: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          id?: string
+          likes?: string | null
+          order_index?: number | null
+          published_at?: string | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          views?: string | null
+          youtube_id?: string | null
+          youtube_url: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          id?: string
+          likes?: string | null
+          order_index?: number | null
+          published_at?: string | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          views?: string | null
+          youtube_id?: string | null
+          youtube_url?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
