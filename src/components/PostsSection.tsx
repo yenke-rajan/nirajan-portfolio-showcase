@@ -316,18 +316,15 @@ const PostsSection = () => {
           ))}
         </div>
 
-        {/* Admin Dashboard Note */}
+        {/* View More Posts */}
         <div className="text-center mt-16 fade-in-up animation-delay-600">
-          <Card className="glass inline-block border-accent/30">
-            <CardContent className="p-6">
-              <div className="space-y-2">
-                <h4 className="font-bold text-gradient">Dynamic Content Management</h4>
-                <p className="text-muted-foreground text-sm">
-                  Posts can be managed through an admin dashboard for easy content updates
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <Button 
+            variant="outline" 
+            className="glass border-primary/30 hover:bg-primary/10 px-8 py-3"
+          >
+            <ArrowRight className="h-5 w-5 mr-2" />
+            View More Posts
+          </Button>
         </div>
       </div>
     </section>

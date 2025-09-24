@@ -212,7 +212,10 @@ const VideosSection = () => {
                   <h4 className="font-bold text-gradient">Subscribe for More</h4>
                   <p className="text-muted-foreground text-sm">Get notified when I upload new tutorials</p>
                 </div>
-                <Button className="btn-glow bg-gradient-accent border-0 ml-4">
+                <Button 
+                  className="btn-glow bg-gradient-accent border-0 ml-4"
+                  onClick={() => window.open('https://www.youtube.com/@MrNKRajan', '_blank')}
+                >
                   Subscribe
                 </Button>
               </div>

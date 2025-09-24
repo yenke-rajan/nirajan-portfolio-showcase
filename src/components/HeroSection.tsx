@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from './ui/button';
-import { ArrowDown, MessageCircle, Download } from 'lucide-react';
+import { ArrowDown, MessageCircle, Download, Sun, Moon } from 'lucide-react';
 import heroBackground from '../assets/hero-bg.jpg';
 import profilePhoto from '../assets/profile-photo.jpg';
+import { useTheme } from 'next-themes';
 
 const HeroSection = () => {
   const [displayText, setDisplayText] = useState('');
+  const [profileClicked, setProfileClicked] = useState(false);
+  const { theme, setTheme } = useTheme();
   const fullText = "Heyy there!! You can call me the Sherlock Holmes of data.";
 
   useEffect(() => {
@@ -74,6 +77,7 @@ const HeroSection = () => {
               <Button 
                 size="lg" 
                 className="btn-glow bg-gradient-primary border-0 hover:shadow-glow-primary px-8 py-4 text-lg"
+                onClick={() => window.open('https://wa.me/9779813293267', '_blank')}
               >
                 <MessageCircle className="mr-2 h-5 w-5" />
                 Chat with Me
@@ -101,13 +105,34 @@ const HeroSection = () => {
               {/* Glow Effect */}
               <div className="absolute inset-0 bg-gradient-primary rounded-full blur-xl opacity-20 animate-glow-pulse"></div>
               
-              {/* Profile Photo */}
-              <div className="relative glass rounded-full p-2">
+              {/* Profile Photo Container with Slider */}
+              <div 
+                className={`relative glass rounded-full p-2 cursor-pointer transition-all duration-500 ${
+                  profileClicked ? 'transform translate-x-8 translate-y-4 scale-75' : ''
+                }`}
+                onClick={() => {
+                  setProfileClicked(!profileClicked);
+                  setTheme(theme === 'dark' ? 'light' : 'dark');
+                }}
+              >
                 <img
                   src={profilePhoto}
                   alt="Nirajan Khatiwada"
                   className="w-80 h-80 lg:w-96 lg:h-96 rounded-full object-cover border-4 border-primary/20"
                 />
+                
+                {/* Theme Toggle Slider */}
+                <div className={`absolute bottom-4 right-4 flex items-center gap-2 bg-background/80 backdrop-blur-sm rounded-full p-2 border border-primary/20 transition-all duration-300 ${
+                  profileClicked ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+                }`}>
+                  <Sun className={`h-4 w-4 transition-colors ${theme === 'light' ? 'text-primary' : 'text-muted-foreground'}`} />
+                  <div className={`w-8 h-4 bg-muted rounded-full relative transition-all duration-200 ${theme === 'light' ? 'bg-primary' : ''}`}>
+                    <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-transform duration-200 ${
+                      theme === 'light' ? 'translate-x-4' : 'translate-x-0.5'
+                    }`}></div>
+                  </div>
+                  <Moon className={`h-4 w-4 transition-colors ${theme === 'dark' ? 'text-primary' : 'text-muted-foreground'}`} />
+                </div>
               </div>
               
               {/* Floating Elements */}

@@ -22,9 +22,9 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: Github, href: 'https://github.com/nirajan', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/nirajan-khatiwada', label: 'LinkedIn' },
-    { icon: Twitter, href: 'https://twitter.com/nirajan_k', label: 'Twitter' },
+    { icon: Github, href: 'https://github.com/yenke-rajan', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/yenke-rajan/', label: 'LinkedIn' },
+    { icon: Twitter, href: 'https://twitter.com/Mr_NKrajan', label: 'Twitter' },
     { icon: Mail, href: 'mailto:nirajan.khatiwada@email.com', label: 'Email' },
   ];
 
