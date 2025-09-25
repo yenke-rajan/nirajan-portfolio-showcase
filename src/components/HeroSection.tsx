@@ -152,41 +152,55 @@ const HeroSection = () => {
               {/* Glow Effect */}
               <div className="absolute inset-0 bg-gradient-primary rounded-full blur-xl opacity-20 animate-glow-pulse"></div>
               
-              {/* Profile Photo Slider Container */}
-              <div className="relative bg-muted/20 rounded-full p-4 glass cursor-pointer" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-                {/* Slider Track */}
-                <div className="w-80 h-80 lg:w-96 lg:h-96 relative overflow-hidden rounded-full">
-                  {/* Profile Image */}
+              {/* Slider Container */}
+              <div className="relative w-[400px] h-80 lg:w-[480px] lg:h-96 bg-muted/20 rounded-full glass cursor-pointer overflow-hidden" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+                
+                {/* Slider Track Background */}
+                <div className={`absolute inset-0 transition-all duration-500 rounded-full ${
+                  theme === 'light' 
+                    ? 'bg-gradient-to-r from-yellow-400/20 to-orange-400/20' 
+                    : 'bg-gradient-to-r from-indigo-600/20 to-purple-600/20'
+                }`}></div>
+                
+                {/* Profile Image - Slides from left to right */}
+                <div className={`absolute top-4 transition-all duration-500 ease-in-out ${
+                  theme === 'light' 
+                    ? 'right-4 transform-none' 
+                    : 'left-4 transform-none'
+                }`}>
                   <img
                     src={profile?.avatar_url || profilePhoto}
                     alt={profile?.display_name || "Nirajan Khatiwada"}
-                    className={`w-full h-full object-cover transition-all duration-500 ${
-                      theme === 'light' 
-                        ? 'transform translate-x-1/2 scale-75 rounded-full' 
-                        : 'transform translate-x-0 scale-100 rounded-full'
-                    }`}
+                    className="w-72 h-72 lg:w-80 lg:h-80 rounded-full object-cover border-4 border-primary/20"
                   />
-                  
-                  {/* Slider Background */}
-                  <div className={`absolute inset-0 transition-all duration-500 ${
-                    theme === 'light' 
-                      ? 'bg-gradient-to-r from-yellow-400/30 to-orange-400/30' 
-                      : 'bg-gradient-to-r from-indigo-600/30 to-purple-600/30'
-                  }`}></div>
-                  
-                  {/* Theme Icons */}
-                  <div className="absolute top-1/2 left-4 transform -translate-y-1/2 transition-opacity duration-300">
-                    <Moon className={`h-8 w-8 ${theme === 'dark' ? 'text-primary' : 'text-muted-foreground/50'}`} />
+                </div>
+                
+                {/* Theme Icons */}
+                <div className={`absolute top-1/2 left-6 transform -translate-y-1/2 transition-all duration-300 ${
+                  theme === 'dark' ? 'opacity-100 scale-100' : 'opacity-30 scale-75'
+                }`}>
+                  <Moon className="h-8 w-8 text-indigo-400" />
+                </div>
+                <div className={`absolute top-1/2 right-6 transform -translate-y-1/2 transition-all duration-300 ${
+                  theme === 'light' ? 'opacity-100 scale-100' : 'opacity-30 scale-75'
+                }`}>
+                  <Sun className="h-8 w-8 text-yellow-500" />
+                </div>
+                
+                {/* Slider Indicator */}
+                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-2 bg-background/80 backdrop-blur-sm rounded-full px-4 py-2">
+                  <div className={`w-3 h-3 rounded-full transition-all duration-300 ${theme === 'dark' ? 'bg-indigo-400' : 'bg-muted-foreground/50'}`}></div>
+                  <div className="w-8 h-1 bg-muted-foreground/30 rounded-full relative">
+                    <div className={`absolute top-0 w-3 h-1 bg-primary rounded-full transition-transform duration-500 ${
+                      theme === 'light' ? 'translate-x-5' : 'translate-x-0'
+                    }`}></div>
                   </div>
-                  <div className="absolute top-1/2 right-4 transform -translate-y-1/2 transition-opacity duration-300">
-                    <Sun className={`h-8 w-8 ${theme === 'light' ? 'text-yellow-500' : 'text-muted-foreground/50'}`} />
-                  </div>
-                  
-                  {/* Slider Indicator */}
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1">
-                    <div className={`w-2 h-2 rounded-full transition-all duration-300 ${theme === 'dark' ? 'bg-primary' : 'bg-muted-foreground'}`}></div>
-                    <div className={`w-2 h-2 rounded-full transition-all duration-300 ${theme === 'light' ? 'bg-yellow-500' : 'bg-muted-foreground'}`}></div>
-                  </div>
+                  <div className={`w-3 h-3 rounded-full transition-all duration-300 ${theme === 'light' ? 'bg-yellow-500' : 'bg-muted-foreground/50'}`}></div>
+                </div>
+                
+                {/* Click hint text */}
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground">
+                  Click to toggle theme
                 </div>
               </div>
               
