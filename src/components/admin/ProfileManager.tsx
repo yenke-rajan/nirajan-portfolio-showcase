@@ -104,9 +104,9 @@ export function ProfileManager() {
 
     setUploadingImage(true);
     try {
-      // Upload to Supabase Storage
+      // Upload to Supabase Storage with user folder structure
       const fileExt = file.name.split('.').pop();
-      const fileName = `${user?.id}-${Date.now()}.${fileExt}`;
+      const fileName = `${user?.id}/avatar-${Date.now()}.${fileExt}`;
       
       const { error: uploadError } = await supabase.storage
         .from('avatars')
