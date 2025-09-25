@@ -1,14 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { MapPin, GraduationCap, Calendar, Code2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const AboutSection = () => {
+  const [profile, setProfile] = useState<any>(null);
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .limit(1)
+        .maybeSingle();
+
+      if (error) throw error;
+      setProfile(data);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
+
   const stats = [
     { number: "6th", label: "Semester", icon: GraduationCap },
     { number: "3+", label: "Years Coding", icon: Code2 },
     { number: "10+", label: "Projects", icon: Calendar },
-    { number: "Nepal", label: "Based in", icon: MapPin },
+    { number: profile?.location || "Nepal", label: "Based in", icon: MapPin },
   ];
 
   const interests = [
@@ -38,23 +60,14 @@ const AboutSection = () => {
                 <h3 className="text-2xl font-bold text-gradient mb-6">My Story</h3>
                 <div className="space-y-4 text-muted-foreground leading-relaxed">
                   <p>
-                    Hello! I'm Nirajan Khatiwada, a passionate data science enthusiast currently 
-                    pursuing my Bsc. CSIT degree. What started as curiosity about how data can 
-                    tell stories has evolved into a deep fascination with machine learning and 
-                    artificial intelligence.
+                    {profile?.bio || "Hello! I'm Nirajan Khatiwada, a passionate data science enthusiast currently pursuing my Bsc. CSIT degree. What started as curiosity about how data can tell stories has evolved into a deep fascination with machine learning and artificial intelligence."}
                   </p>
-                  <p>
-                    I believe in the power of data to solve real-world problems and make informed 
-                    decisions. Whether it's predicting trends, uncovering hidden patterns, or 
-                    building intelligent systems, I'm always excited to dive deep into the data 
-                    and extract meaningful insights.
-                  </p>
-                  <p>
-                    When I'm not analyzing datasets or training models, you'll find me exploring 
-                    new technologies, contributing to open-source projects, or sharing my knowledge 
-                    through various platforms. I'm particularly interested in the intersection of 
-                    AI and social good.
-                  </p>
+                  {profile?.education && (
+                    <div className="mt-4 p-4 bg-muted/30 rounded-lg">
+                      <h4 className="font-semibold text-primary mb-2">Education</h4>
+                      <p className="text-sm">{profile.education}</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
