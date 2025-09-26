@@ -11,7 +11,7 @@ interface Profile {
   display_name: string;
   bio: string;
   location: string;
-  education: string;
+  phone_number: string;
   email_contact: string;
   avatar_url: string;
 }
@@ -22,7 +22,7 @@ export function ProfileManager() {
     display_name: '',
     bio: 'A man who will need no introduction in the near future, but for now a 6th semester Bsc. CSIT student hustling to create some chaos in the field of Data Science.',
     location: '',
-    education: '',
+    phone_number: '',
     email_contact: '',
     avatar_url: '',
   });
@@ -52,7 +52,7 @@ export function ProfileManager() {
           display_name: data.display_name || '',
           bio: data.bio || 'A man who will need no introduction in the near future, but for now a 6th semester Bsc. CSIT student hustling to create some chaos in the field of Data Science.',
           location: data.location || '',
-          education: data.education || '',
+          phone_number: data.phone_number || '',
           email_contact: data.email_contact || '',
           avatar_url: data.avatar_url || '',
         });
@@ -217,11 +217,11 @@ export function ProfileManager() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-2">Education</label>
+        <label className="block text-sm font-medium mb-2">Phone Number</label>
         <Input
-          value={profile.education}
-          onChange={(e) => handleChange('education', e.target.value)}
-          placeholder="Your education background"
+          value={profile.phone_number}
+          onChange={(e) => handleChange('phone_number', e.target.value)}
+          placeholder="Your phone number"
         />
       </div>
 

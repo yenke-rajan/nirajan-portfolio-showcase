@@ -119,10 +119,10 @@ export type Database = {
           bio: string | null
           created_at: string
           display_name: string | null
-          education: string | null
           email_contact: string | null
           id: string
           location: string | null
+          phone_number: string | null
           updated_at: string
           user_id: string
           youtube_channel_id: string | null
@@ -132,10 +132,10 @@ export type Database = {
           bio?: string | null
           created_at?: string
           display_name?: string | null
-          education?: string | null
           email_contact?: string | null
           id?: string
           location?: string | null
+          phone_number?: string | null
           updated_at?: string
           user_id: string
           youtube_channel_id?: string | null
@@ -145,10 +145,10 @@ export type Database = {
           bio?: string | null
           created_at?: string
           display_name?: string | null
-          education?: string | null
           email_contact?: string | null
           id?: string
           location?: string | null
+          phone_number?: string | null
           updated_at?: string
           user_id?: string
           youtube_channel_id?: string | null

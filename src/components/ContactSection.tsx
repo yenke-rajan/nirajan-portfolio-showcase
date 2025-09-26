@@ -71,8 +71,8 @@ const ContactSection = () => {
     {
       icon: Phone,
       label: "Phone",
-      value: "+977 98X-XXX-XXXX",
-      href: "tel:+977981234567",
+      value: profile?.phone_number || "+977 98X-XXX-XXXX",
+      href: `tel:${profile?.phone_number || "+977981234567"}`,
       color: "text-accent"
     },
     {
