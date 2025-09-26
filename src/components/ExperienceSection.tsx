@@ -1,71 +1,110 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Building2, Calendar, MapPin, ExternalLink } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+
+interface Experience {
+  id: string;
+  company: string;
+  position: string;
+  experience_type: string;
+  duration: string;
+  location: string;
+  description: string;
+  technologies: string[];
+  color: string;
+}
 
 const ExperienceSection = () => {
-  const experiences = [
-    {
-      company: "DLYTICA",
-      position: "Data Science Intern",
-      type: "Internship",
-      duration: "Present",
-      location: "Remote",
-      description: "Working on advanced analytics projects, developing machine learning models, and creating data-driven solutions for business problems.",
-      technologies: ["Python", "Machine Learning", "Data Analysis", "SQL"],
-      color: "bg-gradient-primary"
-    },
-    {
-      company: "OASIS INFOBYTE",
-      position: "Data Science Intern", 
-      type: "Internship",
-      duration: "2024",
-      location: "Remote",
-      description: "Completed multiple data science projects including predictive modeling, data visualization, and statistical analysis tasks.",
-      technologies: ["Python", "Pandas", "Matplotlib", "Scikit-learn"],
-      color: "bg-gradient-secondary"
-    },
-    {
-      company: "The Sparks Foundation",
-      position: "Data Science & Business Analytics Intern",
-      type: "Internship", 
-      duration: "2024",
-      location: "Remote",
-      description: "Developed business intelligence solutions and performed comprehensive data analysis for various client projects.",
-      technologies: ["Business Analytics", "Data Visualization", "Python", "Tableau"],
-      color: "bg-gradient-accent"
-    },
-    {
-      company: "E-Cell IIT, Bombay",
-      position: "Campus Executive Intern",
-      type: "Leadership",
-      duration: "2024",
-      location: "Mumbai, India",
-      description: "Organized entrepreneurship events, mentored students, and facilitated startup ecosystem development on campus.",
-      technologies: ["Leadership", "Event Management", "Networking"],
-      color: "bg-gradient-primary"
-    },
-    {
-      company: "CSITAN",
-      position: "Joint Secretary",
-      type: "Leadership",
-      duration: "2023-2024", 
-      location: "Nepal",
-      description: "Led technical initiatives, organized coding competitions, and managed student chapter activities for computer science students.",
-      technologies: ["Leadership", "Event Planning", "Technical Writing"],
-      color: "bg-gradient-secondary"
-    },
-    {
-      company: "Hult Prize at Amrit Campus",
-      position: "Startups Coordinator",
-      type: "Leadership",
-      duration: "2024",
-      location: "Nepal",
-      description: "Coordinated startup pitch competitions, mentored teams, and facilitated connections between entrepreneurs and investors.",
-      technologies: ["Startup Mentoring", "Business Development", "Networking"],
-      color: "bg-gradient-accent"
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+
+  useEffect(() => {
+    loadExperiences();
+  }, []);
+
+  const loadExperiences = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('experiences')
+        .select('*')
+        .order('order_index', { ascending: false });
+
+      if (error) throw error;
+      setExperiences(data || []);
+    } catch (error) {
+      console.error('Error loading experiences:', error);
+      // Fallback to hardcoded data if database fails
+      setExperiences([
+        {
+          id: '1',
+          company: "DLYTICA",
+          position: "Data Science Intern",
+          experience_type: "Internship",
+          duration: "Present",
+          location: "Remote",
+          description: "Working on advanced analytics projects, developing machine learning models, and creating data-driven solutions for business problems.",
+          technologies: ["Python", "Machine Learning", "Data Analysis", "SQL"],
+          color: "bg-gradient-primary"
+        },
+        {
+          id: '2',
+          company: "OASIS INFOBYTE",
+          position: "Data Science Intern", 
+          experience_type: "Internship",
+          duration: "2024",
+          location: "Remote",
+          description: "Completed multiple data science projects including predictive modeling, data visualization, and statistical analysis tasks.",
+          technologies: ["Python", "Pandas", "Matplotlib", "Scikit-learn"],
+          color: "bg-gradient-secondary"
+        },
+        {
+          id: '3',
+          company: "The Sparks Foundation",
+          position: "Data Science & Business Analytics Intern",
+          experience_type: "Internship", 
+          duration: "2024",
+          location: "Remote",
+          description: "Developed business intelligence solutions and performed comprehensive data analysis for various client projects.",
+          technologies: ["Business Analytics", "Data Visualization", "Python", "Tableau"],
+          color: "bg-gradient-accent"
+        },
+        {
+          id: '4',
+          company: "E-Cell IIT, Bombay",
+          position: "Campus Executive Intern",
+          experience_type: "Leadership",
+          duration: "2024",
+          location: "Mumbai, India",
+          description: "Organized entrepreneurship events, mentored students, and facilitated startup ecosystem development on campus.",
+          technologies: ["Leadership", "Event Management", "Networking"],
+          color: "bg-gradient-primary"
+        },
+        {
+          id: '5',
+          company: "CSITAN",
+          position: "Joint Secretary",
+          experience_type: "Leadership",
+          duration: "2023-2024", 
+          location: "Nepal",
+          description: "Led technical initiatives, organized coding competitions, and managed student chapter activities for computer science students.",
+          technologies: ["Leadership", "Event Planning", "Technical Writing"],
+          color: "bg-gradient-secondary"
+        },
+        {
+          id: '6',
+          company: "Hult Prize at Amrit Campus",
+          position: "Startups Coordinator",
+          experience_type: "Leadership",
+          duration: "2024",
+          location: "Nepal",
+          description: "Coordinated startup pitch competitions, mentored teams, and facilitated connections between entrepreneurs and investors.",
+          technologies: ["Startup Mentoring", "Business Development", "Networking"],
+          color: "bg-gradient-accent"
+        }
+      ]);
     }
-  ];
+  };
 
   return (
     <section id="experience" className="py-20 relative">
@@ -118,7 +157,7 @@ const ExperienceSection = () => {
                           </p>
                         </div>
                         <Badge variant="secondary" className="glass">
-                          {exp.type}
+                          {exp.experience_type}
                         </Badge>
                       </div>
 

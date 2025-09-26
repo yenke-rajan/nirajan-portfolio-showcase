@@ -71,10 +71,14 @@ export function ProfileManager() {
     setLoading(true);
 
     try {
+      if (!user?.id) {
+        throw new Error('User not authenticated');
+      }
+
       const { error } = await supabase
         .from('profiles')
         .upsert({
-          user_id: user?.id,
+          user_id: user.id,
           ...profile,
         });
 
@@ -83,7 +87,7 @@ export function ProfileManager() {
       toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
-      toast.error('Failed to update profile');
+      toast.error(`Failed to update profile: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }

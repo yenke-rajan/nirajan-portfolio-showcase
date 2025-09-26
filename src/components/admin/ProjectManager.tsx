@@ -42,6 +42,7 @@ export function ProjectManager() {
   });
   const [newTech, setNewTech] = useState('');
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -153,6 +154,40 @@ export function ProjectManager() {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    setUploadingImage(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user?.id}/project-image-${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('post-images')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('post-images')
+        .getPublicUrl(fileName);
+
+      setFormData(prev => ({ ...prev, image_url: publicUrl }));
+      toast.success('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error('Failed to upload image');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   const resetForm = () => {
     setEditingId(null);
     setFormData({
@@ -245,12 +280,28 @@ export function ProjectManager() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Image URL</label>
-          <Input
-            value={formData.image_url}
-            onChange={(e) => setFormData(prev => ({...prev, image_url: e.target.value}))}
-            placeholder="https://example.com/image.jpg"
-          />
+          <label className="block text-sm font-medium mb-2">Project Image</label>
+          <div className="space-y-2">
+            <Input
+              value={formData.image_url}
+              onChange={(e) => setFormData(prev => ({...prev, image_url: e.target.value}))}
+              placeholder="https://example.com/image.jpg"
+            />
+            <div className="text-sm text-muted-foreground">OR</div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+            />
+            {formData.image_url && (
+              <img 
+                src={formData.image_url} 
+                alt="Project preview"
+                className="w-32 h-20 object-cover rounded border"
+              />
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">

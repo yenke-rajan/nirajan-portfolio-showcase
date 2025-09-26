@@ -37,6 +37,7 @@ export function VideoManager() {
     published_at: '',
   });
   const [loading, setLoading] = useState(false);
+  const [uploadingThumbnail, setUploadingThumbnail] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -153,6 +154,40 @@ export function VideoManager() {
     }
   };
 
+  const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    setUploadingThumbnail(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user?.id}/video-thumbnail-${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('post-images')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('post-images')
+        .getPublicUrl(fileName);
+
+      setFormData(prev => ({ ...prev, thumbnail_url: publicUrl }));
+      toast.success('Thumbnail uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading thumbnail:', error);
+      toast.error('Failed to upload thumbnail');
+    } finally {
+      setUploadingThumbnail(false);
+    }
+  };
+
   const resetForm = () => {
     setEditingId(null);
     setFormData({
@@ -247,12 +282,28 @@ export function VideoManager() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Thumbnail URL</label>
-          <Input
-            value={formData.thumbnail_url}
-            onChange={(e) => setFormData(prev => ({...prev, thumbnail_url: e.target.value}))}
-            placeholder="Auto-filled from YouTube"
-          />
+          <label className="block text-sm font-medium mb-2">Thumbnail</label>
+          <div className="space-y-2">
+            <Input
+              value={formData.thumbnail_url}
+              onChange={(e) => setFormData(prev => ({...prev, thumbnail_url: e.target.value}))}
+              placeholder="Auto-filled from YouTube or paste URL"
+            />
+            <div className="text-sm text-muted-foreground">OR</div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleThumbnailUpload}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+            />
+            {formData.thumbnail_url && (
+              <img 
+                src={formData.thumbnail_url} 
+                alt="Thumbnail preview"
+                className="w-32 h-20 object-cover rounded border"
+              />
+            )}
+          </div>
         </div>
 
         <div className="flex gap-2">
