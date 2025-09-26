@@ -12,7 +12,6 @@ interface Profile {
   bio: string;
   location: string;
   education: string;
-  youtube_channel_id: string;
   email_contact: string;
   avatar_url: string;
 }
@@ -24,7 +23,6 @@ export function ProfileManager() {
     bio: 'A man who will need no introduction in the near future, but for now a 6th semester Bsc. CSIT student hustling to create some chaos in the field of Data Science.',
     location: '',
     education: '',
-    youtube_channel_id: 'UCJw2gEKhNFlT1MSWMJ-Jt1A',
     email_contact: '',
     avatar_url: '',
   });
@@ -55,7 +53,6 @@ export function ProfileManager() {
           bio: data.bio || 'A man who will need no introduction in the near future, but for now a 6th semester Bsc. CSIT student hustling to create some chaos in the field of Data Science.',
           location: data.location || '',
           education: data.education || '',
-          youtube_channel_id: data.youtube_channel_id || 'UCJw2gEKhNFlT1MSWMJ-Jt1A',
           email_contact: data.email_contact || '',
           avatar_url: data.avatar_url || '',
         });
@@ -75,15 +72,23 @@ export function ProfileManager() {
         throw new Error('User not authenticated');
       }
 
-      const { error } = await supabase
+      console.log('Attempting to update profile:', { user_id: user.id, ...profile });
+
+      const { data, error } = await supabase
         .from('profiles')
         .upsert({
           user_id: user.id,
           ...profile,
+        }, {
+          onConflict: 'user_id'
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error details:', error);
+        throw error;
+      }
 
+      console.log('Profile updated successfully:', data);
       toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -220,14 +225,6 @@ export function ProfileManager() {
         />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-2">YouTube Channel ID</label>
-        <Input
-          value={profile.youtube_channel_id}
-          onChange={(e) => handleChange('youtube_channel_id', e.target.value)}
-          placeholder="Your YouTube channel ID"
-        />
-      </div>
 
       <div>
         <label className="block text-sm font-medium mb-2">Contact Email</label>

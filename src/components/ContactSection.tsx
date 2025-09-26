@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -15,6 +16,26 @@ const ContactSection = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .limit(1)
+        .maybeSingle();
+
+      if (error) throw error;
+      setProfile(data);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
@@ -43,8 +64,8 @@ const ContactSection = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "nirajan.khatiwada@email.com",
-      href: "mailto:nirajan.khatiwada@email.com",
+      value: profile?.email_contact || "nirajan.khatiwada@email.com",
+      href: `mailto:${profile?.email_contact || "nirajan.khatiwada@email.com"}`,
       color: "text-primary"
     },
     {
@@ -57,7 +78,7 @@ const ContactSection = () => {
     {
       icon: MapPin,
       label: "Location",
-      value: "Kathmandu, Nepal",
+      value: profile?.location || "Kathmandu, Nepal",
       href: "#",
       color: "text-success"
     },
