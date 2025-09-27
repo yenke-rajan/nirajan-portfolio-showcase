@@ -10,7 +10,8 @@ import { ProjectManager } from '@/components/admin/ProjectManager';
 import { VideoManager } from '@/components/admin/VideoManager';
 import { PostManager } from '@/components/admin/PostManager';
 import { CVManager } from '@/components/admin/CVManager';
-import { LogOut, User, Briefcase, FolderOpen, Video, FileText, FileUser } from 'lucide-react';
+import SkillsManager from '@/components/admin/SkillsManager';
+import { LogOut, User, Briefcase, FolderOpen, Video, FileText, FileUser, Award } from 'lucide-react';
 
 export default function AdminDashboard() {
   const { user, signOut, loading } = useAuth();
@@ -42,10 +43,14 @@ export default function AdminDashboard() {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="profile" className="flex items-center gap-2">
               <User className="w-4 h-4" />
               Profile
+            </TabsTrigger>
+            <TabsTrigger value="skills" className="flex items-center gap-2">
+              <Award className="w-4 h-4" />
+              Skills
             </TabsTrigger>
             <TabsTrigger value="cv" className="flex items-center gap-2">
               <FileUser className="w-4 h-4" />
@@ -81,6 +86,10 @@ export default function AdminDashboard() {
                 <ProfileManager />
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="skills">
+            <SkillsManager />
           </TabsContent>
 
           <TabsContent value="cv">

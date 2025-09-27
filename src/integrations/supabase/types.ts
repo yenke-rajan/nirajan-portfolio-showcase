@@ -115,40 +115,58 @@ export type Database = {
       }
       profiles: {
         Row: {
+          about_me: string | null
           avatar_url: string | null
           bio: string | null
           created_at: string
           display_name: string | null
           email_contact: string | null
+          github_url: string | null
           id: string
+          instagram_url: string | null
+          linkedin_url: string | null
           location: string | null
+          my_story: string | null
           phone_number: string | null
+          twitter_url: string | null
           updated_at: string
           user_id: string
           youtube_channel_id: string | null
         }
         Insert: {
+          about_me?: string | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
           email_contact?: string | null
+          github_url?: string | null
           id?: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
           location?: string | null
+          my_story?: string | null
           phone_number?: string | null
+          twitter_url?: string | null
           updated_at?: string
           user_id: string
           youtube_channel_id?: string | null
         }
         Update: {
+          about_me?: string | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
           email_contact?: string | null
+          github_url?: string | null
           id?: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
           location?: string | null
+          my_story?: string | null
           phone_number?: string | null
+          twitter_url?: string | null
           updated_at?: string
           user_id?: string
           youtube_channel_id?: string | null
@@ -204,6 +222,39 @@ export type Database = {
           status?: string | null
           technologies?: string[] | null
           title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          name: string
+          order_index: number | null
+          proficiency_level: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          order_index?: number | null
+          proficiency_level?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          order_index?: number | null
+          proficiency_level?: number | null
           updated_at?: string
           user_id?: string
         }

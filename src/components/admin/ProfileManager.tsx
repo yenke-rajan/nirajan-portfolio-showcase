@@ -14,6 +14,12 @@ interface Profile {
   phone_number: string;
   email_contact: string;
   avatar_url: string;
+  my_story: string;
+  about_me: string;
+  github_url: string;
+  linkedin_url: string;
+  twitter_url: string;
+  instagram_url: string;
 }
 
 export function ProfileManager() {
@@ -25,6 +31,12 @@ export function ProfileManager() {
     phone_number: '',
     email_contact: '',
     avatar_url: '',
+    my_story: '',
+    about_me: '',
+    github_url: '',
+    linkedin_url: '',
+    twitter_url: '',
+    instagram_url: '',
   });
   const [loading, setLoading] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -55,6 +67,12 @@ export function ProfileManager() {
           phone_number: data.phone_number || '',
           email_contact: data.email_contact || '',
           avatar_url: data.avatar_url || '',
+          my_story: data.my_story || '',
+          about_me: data.about_me || '',
+          github_url: data.github_url || '',
+          linkedin_url: data.linkedin_url || '',
+          twitter_url: data.twitter_url || '',
+          instagram_url: data.instagram_url || '',
         });
       }
     } catch (error) {
@@ -234,6 +252,67 @@ export function ProfileManager() {
           onChange={(e) => handleChange('email_contact', e.target.value)}
           placeholder="Your contact email"
         />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-2">About Me</label>
+        <Textarea
+          value={profile.about_me}
+          onChange={(e) => handleChange('about_me', e.target.value)}
+          placeholder="Write about yourself for the About Me section..."
+          rows={3}
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-2">My Story</label>
+        <Textarea
+          value={profile.my_story}
+          onChange={(e) => handleChange('my_story', e.target.value)}
+          placeholder="Tell your story..."
+          rows={5}
+        />
+      </div>
+
+      {/* Profile Links Section */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Profile Links</h3>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">GitHub URL</label>
+          <Input
+            value={profile.github_url}
+            onChange={(e) => handleChange('github_url', e.target.value)}
+            placeholder="https://github.com/yourusername"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">LinkedIn URL</label>
+          <Input
+            value={profile.linkedin_url}
+            onChange={(e) => handleChange('linkedin_url', e.target.value)}
+            placeholder="https://linkedin.com/in/yourusername"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">Twitter URL</label>
+          <Input
+            value={profile.twitter_url}
+            onChange={(e) => handleChange('twitter_url', e.target.value)}
+            placeholder="https://twitter.com/yourusername"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">Instagram URL</label>
+          <Input
+            value={profile.instagram_url}
+            onChange={(e) => handleChange('instagram_url', e.target.value)}
+            placeholder="https://instagram.com/yourusername"
+          />
+        </div>
       </div>
 
       <Button type="submit" disabled={loading}>
