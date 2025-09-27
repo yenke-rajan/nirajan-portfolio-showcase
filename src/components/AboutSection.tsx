@@ -57,25 +57,31 @@ const AboutSection = () => {
           <div className="space-y-8 fade-in-left">
             <Card className="glass">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-gradient mb-6">My Story</h3>
+                <h3 className="text-2xl font-bold text-gradient mb-6">About Me</h3>
                 <div className="space-y-4 text-muted-foreground leading-relaxed">
                   <p>
-                    {profile?.bio || "Hello! I'm Nirajan Khatiwada, a passionate data science enthusiast currently pursuing my Bsc. CSIT degree. What started as curiosity about how data can tell stories has evolved into a deep fascination with machine learning and artificial intelligence."}
+                    {profile?.about_me || "Passionate about turning data into meaningful insights and building intelligent systems."}
                   </p>
-                  {profile?.education && (
-                    <div className="mt-4 p-4 bg-muted/30 rounded-lg">
-                      <h4 className="font-semibold text-primary mb-2">Education</h4>
-                      <p className="text-sm">{profile.education}</p>
-                    </div>
-                  )}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Interests */}
+            <Card className="glass">
+              <CardContent className="p-8">
+                <h3 className="text-2xl font-bold text-gradient mb-6">My Story</h3>
+                <div className="space-y-4 text-muted-foreground leading-relaxed">
+                  <p>
+                    {profile?.my_story || profile?.bio || "Hello! I'm Nirajan Khatiwada, a passionate data science enthusiast currently pursuing my Bsc. CSIT degree. What started as curiosity about how data can tell stories has evolved into a deep fascination with machine learning and artificial intelligence."}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Interests - Now sourced from Skills table */}
             <Card className="glass">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold text-gradient mb-6">Interests & Expertise</h3>
+                <p className="text-muted-foreground mb-4">Check out the Skills section below for my detailed expertise areas</p>
                 <div className="flex flex-wrap gap-2">
                   {interests.map((interest, index) => (
                     <Badge 

@@ -1,11 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
+import { Badge } from './ui/badge';
+import { supabase } from '@/integrations/supabase/client';
 import dataAnalysisIcon from '../assets/data-analysis-icon.png';
 import mlIcon from '../assets/ml-icon.png';
 import graphicsIcon from '../assets/graphics-icon.png';
 
+interface Skill {
+  id: string;
+  name: string;
+  category: string;
+  proficiency_level: number;
+  order_index: number;
+}
+
 const SkillsSection = () => {
-  const skills = [
+  const [skills, setSkills] = useState<Skill[]>([]);
+
+  useEffect(() => {
+    loadSkills();
+  }, []);
+
+  const loadSkills = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('skills')
+        .select('*')
+        .order('order_index', { ascending: true });
+
+      if (error) throw error;
+      setSkills(data || []);
+    } catch (error) {
+      console.error('Error loading skills:', error);
+    }
+  };
+
+  const defaultSkills = [
     {
       title: "DATA ANALYSIS",
       description: "Transforming raw data into actionable insights with precision and creativity.",
@@ -29,6 +59,21 @@ const SkillsSection = () => {
     }
   ];
 
+  // Group skills by category
+  const skillsByCategory = skills.reduce((acc, skill) => {
+    if (!acc[skill.category]) {
+      acc[skill.category] = [];
+    }
+    acc[skill.category].push(skill);
+    return acc;
+  }, {} as Record<string, Skill[]>);
+
+  const getProficiencyLabel = (level: number) => {
+    if (level <= 1) return 'Beginner';
+    if (level <= 3) return 'Intermediate';
+    return 'Advanced';
+  };
+
   return (
     <section id="skills" className="py-20 relative">
       <div className="container mx-auto px-4">
@@ -42,9 +87,9 @@ const SkillsSection = () => {
           </p>
         </div>
 
-        {/* Skills Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {skills.map((skill, index) => (
+        {/* Default Skills Display */}
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
+          {defaultSkills.map((skill, index) => (
             <Card 
               key={skill.title}
               className={`glass hover-lift cursor-pointer group fade-in-up transition-all duration-500`}
@@ -96,6 +141,41 @@ const SkillsSection = () => {
             </Card>
           ))}
         </div>
+
+        {/* Dynamic Skills from Database */}
+        {skills.length > 0 && (
+          <div className="mt-16">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-gradient mb-4">Interests & Expertise</h3>
+              <p className="text-muted-foreground">Skills and technologies I work with</p>
+            </div>
+            
+            <div className="space-y-8">
+              {Object.entries(skillsByCategory).map(([category, categorySkills]) => (
+                <Card key={category} className="glass">
+                  <CardContent className="p-8">
+                    <h4 className="text-xl font-semibold text-primary mb-4 capitalize">{category}</h4>
+                    <div className="flex flex-wrap gap-3">
+                      {categorySkills.map((skill, index) => (
+                        <Badge 
+                          key={skill.id}
+                          variant="secondary"
+                          className="glass hover:bg-primary/20 transition-colors duration-300 cursor-pointer hover-lift px-4 py-2"
+                          style={{ animationDelay: `${index * 100}ms` }}
+                        >
+                          <span className="mr-2">{skill.name}</span>
+                          <span className="text-xs opacity-70">
+                            {getProficiencyLabel(skill.proficiency_level)}
+                          </span>
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Bottom CTA */}
         <div className="text-center mt-16 fade-in-up animation-delay-600">

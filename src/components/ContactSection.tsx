@@ -95,28 +95,32 @@ const ContactSection = () => {
     {
       icon: Github,
       label: "GitHub",
-      href: "https://github.com/nirajan",
-      color: "hover:text-primary"
+      href: profile?.github_url || "https://github.com/nirajan",
+      color: "hover:text-primary",
+      show: profile?.github_url || true
     },
     {
       icon: Linkedin,
       label: "LinkedIn", 
-      href: "https://linkedin.com/in/nirajan-khatiwada",
-      color: "hover:text-accent"
+      href: profile?.linkedin_url || "https://linkedin.com/in/nirajan-khatiwada",
+      color: "hover:text-accent",
+      show: profile?.linkedin_url || true
     },
     {
       icon: Twitter,
       label: "Twitter",
-      href: "https://twitter.com/nirajan_k",
-      color: "hover:text-primary"
+      href: profile?.twitter_url || "https://twitter.com/nirajan_k",
+      color: "hover:text-primary",
+      show: profile?.twitter_url || true
     },
     {
       icon: Instagram,
       label: "Instagram",
-      href: "https://instagram.com/nirajan.k",
-      color: "hover:text-accent"
+      href: profile?.instagram_url || "https://instagram.com/nirajan.k",
+      color: "hover:text-accent",
+      show: !!profile?.instagram_url || true
     }
-  ];
+  ].filter(link => link.show);
 
   return (
     <section id="contact" className="py-20 relative">

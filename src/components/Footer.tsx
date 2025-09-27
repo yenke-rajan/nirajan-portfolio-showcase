@@ -1,8 +1,30 @@
-import React from 'react';
-import { Heart, Github, Linkedin, Twitter, Mail, ArrowUp } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Heart, Github, Linkedin, Twitter, Mail, ArrowUp, Instagram } from 'lucide-react';
 import { Button } from './ui/button';
+import { supabase } from '@/integrations/supabase/client';
 
 const Footer = () => {
+  const [profile, setProfile] = useState<any>(null);
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .limit(1)
+        .maybeSingle();
+
+      if (error) throw error;
+      setProfile(data);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -22,11 +44,37 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: Github, href: 'https://github.com/yenke-rajan', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/in/yenke-rajan/', label: 'LinkedIn' },
-    { icon: Twitter, href: 'https://twitter.com/Mr_NKrajan', label: 'Twitter' },
-    { icon: Mail, href: 'mailto:nirajan.khatiwada@email.com', label: 'Email' },
-  ];
+    { 
+      icon: Github, 
+      href: profile?.github_url || 'https://github.com/yenke-rajan', 
+      label: 'GitHub',
+      show: profile?.github_url || true
+    },
+    { 
+      icon: Linkedin, 
+      href: profile?.linkedin_url || 'https://www.linkedin.com/in/yenke-rajan/', 
+      label: 'LinkedIn',
+      show: profile?.linkedin_url || true
+    },
+    { 
+      icon: Twitter, 
+      href: profile?.twitter_url || 'https://twitter.com/Mr_NKrajan', 
+      label: 'Twitter',
+      show: profile?.twitter_url || true
+    },
+    { 
+      icon: Instagram, 
+      href: profile?.instagram_url, 
+      label: 'Instagram',
+      show: !!profile?.instagram_url
+    },
+    { 
+      icon: Mail, 
+      href: `mailto:${profile?.email_contact || 'nirajan.khatiwada@email.com'}`, 
+      label: 'Email',
+      show: true
+    },
+  ].filter(link => link.show);
 
   return (
     <footer className="relative bg-card border-t border-border/50">
