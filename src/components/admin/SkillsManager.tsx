@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Trash2, Plus } from 'lucide-react';
+import { skillSchema, type SkillData } from '@/lib/validation';
 
 interface Skill {
   id: string;
@@ -54,10 +55,20 @@ export default function SkillsManager() {
   };
 
   const addSkill = async () => {
-    if (!newSkill.name.trim()) return;
-
     setLoading(true);
     try {
+      // Validate skill data
+      const validation = skillSchema.safeParse(newSkill);
+      
+      if (!validation.success) {
+        toast({
+          title: "Validation Error",
+          description: validation.error.issues[0]?.message || "Invalid skill data",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('No user found');
 
@@ -65,9 +76,9 @@ export default function SkillsManager() {
         .from('skills')
         .insert({
           user_id: user.id,
-          name: newSkill.name.trim(),
-          category: newSkill.category,
-          proficiency_level: newSkill.proficiency_level,
+          name: validation.data.name,
+          category: validation.data.category,
+          proficiency_level: validation.data.proficiency_level,
           order_index: skills.length
         });
 
@@ -80,7 +91,6 @@ export default function SkillsManager() {
         description: "Skill added successfully",
       });
     } catch (error: any) {
-      console.error('Error adding skill:', error);
       toast({
         title: "Error",
         description: "Failed to add skill",

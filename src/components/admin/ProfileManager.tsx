@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { Upload, X } from 'lucide-react';
+import { profileSchema, type ProfileData } from '@/lib/validation';
 
 interface Profile {
   display_name: string;
@@ -40,6 +41,7 @@ export function ProfileManager() {
   });
   const [loading, setLoading] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [errors, setErrors] = useState<Partial<ProfileData>>({});
 
   useEffect(() => {
     if (user) {
@@ -83,6 +85,7 @@ export function ProfileManager() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
     setLoading(true);
 
     try {
@@ -90,27 +93,39 @@ export function ProfileManager() {
         throw new Error('User not authenticated');
       }
 
-      console.log('Attempting to update profile:', { user_id: user.id, ...profile });
+      // Validate profile data
+      const validation = profileSchema.safeParse(profile);
+      
+      if (!validation.success) {
+        const formErrors: Partial<ProfileData> = {};
+        validation.error.issues.forEach((issue) => {
+          if (issue.path.length > 0) {
+            const field = issue.path[0] as keyof ProfileData;
+            formErrors[field] = issue.message;
+          }
+        });
+        setErrors(formErrors);
+        toast.error('Please check your input and try again.');
+        return;
+      }
 
       const { data, error } = await supabase
         .from('profiles')
         .upsert({
           user_id: user.id,
-          ...profile,
+          ...validation.data,
         }, {
           onConflict: 'user_id'
         });
 
       if (error) {
-        console.error('Supabase error details:', error);
         throw error;
       }
 
-      console.log('Profile updated successfully:', data);
       toast.success('Profile updated successfully!');
     } catch (error) {
-      console.error('Error updating profile:', error);
-      toast.error(`Failed to update profile: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      toast.error(`Failed to update profile: ${errorMessage}`);
     } finally {
       setLoading(false);
     }

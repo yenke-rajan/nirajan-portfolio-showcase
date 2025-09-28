@@ -7,9 +7,10 @@ import { Textarea } from './ui/textarea';
 import { Badge } from './ui/badge';
 import { Mail, MessageCircle, Phone, MapPin, Send, Github, Linkedin, Twitter, Instagram } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { contactFormSchema, type ContactFormData } from '@/lib/validation';
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
     subject: '',
@@ -17,6 +18,7 @@ const ContactSection = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [profile, setProfile] = useState<any>(null);
+  const [errors, setErrors] = useState<Partial<ContactFormData>>({});
 
   useEffect(() => {
     loadProfile();
@@ -46,18 +48,56 @@ const ContactSection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+    
+    // Validate form data
+    const validation = contactFormSchema.safeParse(formData);
+    
+    if (!validation.success) {
+      const formErrors: Partial<ContactFormData> = {};
+      validation.error.issues.forEach((issue) => {
+        if (issue.path.length > 0) {
+          const field = issue.path[0] as keyof ContactFormData;
+          formErrors[field] = issue.message;
+        }
+      });
+      setErrors(formErrors);
+      toast({
+        title: "Validation Error",
+        description: "Please check your input and try again.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    toast({
-      title: "Message Sent Successfully!",
-      description: "Thank you for reaching out. I'll get back to you soon.",
-    });
-    
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    setIsSubmitting(false);
+    try {
+      // Call the secure send-email edge function
+      const { error } = await supabase.functions.invoke('send-email', {
+        body: validation.data
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Message Sent Successfully!",
+        description: "Thank you for reaching out. I'll get back to you soon.",
+      });
+      
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast({
+        title: "Failed to Send Message",
+        description: "Please try again later or contact me directly.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -159,9 +199,10 @@ const ContactSection = () => {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="glass border-primary/30 focus:border-primary"
+                        className={`glass border-primary/30 focus:border-primary ${errors.name ? 'border-destructive' : ''}`}
                         placeholder="Your full name"
                       />
+                      {errors.name && <p className="text-sm text-destructive mt-1">{errors.name}</p>}
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="email" className="text-sm font-medium text-foreground">
@@ -174,9 +215,10 @@ const ContactSection = () => {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="glass border-primary/30 focus:border-primary"
+                        className={`glass border-primary/30 focus:border-primary ${errors.email ? 'border-destructive' : ''}`}
                         placeholder="your@email.com"
                       />
+                      {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
                     </div>
                   </div>
 
@@ -190,9 +232,10 @@ const ContactSection = () => {
                       value={formData.subject}
                       onChange={handleChange}
                       required
-                      className="glass border-primary/30 focus:border-primary"
+                      className={`glass border-primary/30 focus:border-primary ${errors.subject ? 'border-destructive' : ''}`}
                       placeholder="What's this about?"
                     />
+                    {errors.subject && <p className="text-sm text-destructive mt-1">{errors.subject}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -206,9 +249,10 @@ const ContactSection = () => {
                       onChange={handleChange}
                       required
                       rows={6}
-                      className="glass border-primary/30 focus:border-primary resize-none"
+                      className={`glass border-primary/30 focus:border-primary resize-none ${errors.message ? 'border-destructive' : ''}`}
                       placeholder="Tell me about your project or just say hello..."
                     />
+                    {errors.message && <p className="text-sm text-destructive mt-1">{errors.message}</p>}
                   </div>
 
                   <Button
