@@ -62,6 +62,42 @@ export type Database = {
         }
         Relationships: []
       }
+      featured_skills: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          order_index: number | null
+          technologies: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          order_index?: number | null
+          technologies?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          order_index?: number | null
+          technologies?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       posts: {
         Row: {
           category: string | null

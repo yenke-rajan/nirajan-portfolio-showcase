@@ -7,6 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { Upload, X } from 'lucide-react';
 import { profileSchema, type ProfileData } from '@/lib/validation';
+import { FeaturedSkillsManager } from './FeaturedSkillsManager';
+import { Separator } from '@/components/ui/separator';
 
 interface Profile {
   display_name: string;
@@ -333,6 +335,10 @@ export function ProfileManager() {
       <Button type="submit" disabled={loading}>
         {loading ? 'Updating...' : 'Update Profile'}
       </Button>
+
+      {/* Featured Skills Section */}
+      <Separator className="my-8" />
+      <FeaturedSkillsManager />
     </form>
   );
 }
