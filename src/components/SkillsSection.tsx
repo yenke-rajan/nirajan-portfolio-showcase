@@ -145,6 +145,20 @@ const SkillsSection = () => {
           </div>
         )}
 
+        {/* No Skills Message */}
+        {featuredSkills.length === 0 && skills.length === 0 && (
+          <Card className="glass max-w-2xl mx-auto">
+            <CardContent className="p-12 text-center">
+              <p className="text-xl text-muted-foreground mb-4">
+                No skills added yet
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Add your skills from the Admin Dashboard to showcase them here
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Dynamic Skills from Database */}
         {skills.length > 0 && (
           <div className="mt-16 space-y-8">
@@ -174,12 +188,14 @@ const SkillsSection = () => {
         )}
 
         {/* Bottom CTA */}
-        <div className="text-center mt-16 fade-in-up animation-delay-600">
-          <div className="inline-flex items-center gap-2 text-accent">
-            <span className="text-lg">Ready to see these skills in action?</span>
-            <span className="animate-bounce">⚡</span>
+        {(featuredSkills.length > 0 || skills.length > 0) && (
+          <div className="text-center mt-16 fade-in-up animation-delay-600">
+            <div className="inline-flex items-center gap-2 text-accent">
+              <span className="text-lg">Ready to see these skills in action?</span>
+              <span className="animate-bounce">⚡</span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
