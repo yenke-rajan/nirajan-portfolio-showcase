@@ -147,36 +147,29 @@ const SkillsSection = () => {
 
         {/* Dynamic Skills from Database */}
         {skills.length > 0 && (
-          <div className="mt-16">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold text-gradient mb-4">Interests & Expertise</h3>
-              <p className="text-muted-foreground">Skills and technologies I work with</p>
-            </div>
-            
-            <div className="space-y-8">
-              {Object.entries(skillsByCategory).map(([category, categorySkills]) => (
-                <Card key={category} className="glass">
-                  <CardContent className="p-8">
-                    <h4 className="text-xl font-semibold text-primary mb-4 capitalize">{category}</h4>
-                    <div className="flex flex-wrap gap-3">
-                      {categorySkills.map((skill, index) => (
-                        <Badge 
-                          key={skill.id}
-                          variant="secondary"
-                          className="glass hover:bg-primary/20 transition-colors duration-300 cursor-pointer hover-lift px-4 py-2"
-                          style={{ animationDelay: `${index * 100}ms` }}
-                        >
-                          <span className="mr-2">{skill.name}</span>
-                          <span className="text-xs opacity-70">
-                            {getProficiencyLabel(skill.proficiency_level)}
-                          </span>
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+          <div className="mt-16 space-y-8">
+            {Object.entries(skillsByCategory).map(([category, categorySkills]) => (
+              <Card key={category} className="glass">
+                <CardContent className="p-8">
+                  <h4 className="text-xl font-semibold text-primary mb-4 capitalize">{category}</h4>
+                  <div className="flex flex-wrap gap-3">
+                    {categorySkills.map((skill, index) => (
+                      <Badge 
+                        key={skill.id}
+                        variant="secondary"
+                        className="glass hover:bg-primary/20 transition-colors duration-300 cursor-pointer hover-lift px-4 py-2"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
+                        <span className="mr-2">{skill.name}</span>
+                        <span className="text-xs opacity-70">
+                          {getProficiencyLabel(skill.proficiency_level)}
+                        </span>
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         )}
 
