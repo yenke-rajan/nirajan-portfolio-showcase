@@ -10,9 +10,14 @@ const HeroSection = () => {
   const [displayText, setDisplayText] = useState('');
   const [profileClicked, setProfileClicked] = useState(false);
   const [profile, setProfile] = useState<any>(null);
-  const [photoPosition, setPhotoPosition] = useState<'left' | 'right'>('right');
   const { theme, setTheme } = useTheme();
   const fullText = "Heyy there!! You can call me the Sherlock Holmes of data.";
+  
+  const photoPosition = theme === 'light' ? 'right' : 'left';
+  
+  const handlePhotoClick = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
 
   useEffect(() => {
     let index = 0;
@@ -154,7 +159,7 @@ const HeroSection = () => {
               <div className="absolute inset-0 bg-gradient-primary rounded-full blur-xl opacity-20 animate-glow-pulse"></div>
               
               {/* Slider Container */}
-              <div className="relative w-[400px] h-80 lg:w-[480px] lg:h-96 bg-muted/20 rounded-full glass cursor-pointer overflow-hidden" onClick={() => setPhotoPosition(photoPosition === 'right' ? 'left' : 'right')}>
+              <div className="relative w-[400px] h-80 lg:w-[480px] lg:h-96 bg-muted/20 rounded-full glass cursor-pointer overflow-hidden" onClick={handlePhotoClick}>
                 
                 {/* Slider Track Background */}
                 <div className={`absolute inset-0 transition-all duration-500 rounded-full ${
@@ -201,7 +206,7 @@ const HeroSection = () => {
                 
                 {/* Click hint text */}
                 <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground">
-                  Click to slide photo
+                  Click to toggle theme
                 </div>
               </div>
               

@@ -8,7 +8,7 @@
 
 @layer base {
   :root {
-    /* Core brand colors */
+    /* Core brand colors - Dark Mode */
     --background: 220 26% 5%;
     --foreground: 210 40% 98%;
     
@@ -59,6 +59,54 @@
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     
     --radius: 1rem;
+  }
+
+  .light {
+    /* Core brand colors - Light Mode */
+    --background: 210 40% 98%;
+    --foreground: 220 26% 14%;
+    
+    /* Data science inspired gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(240 85% 60%), hsl(260 85% 55%));
+    --gradient-secondary: linear-gradient(135deg, hsl(200 90% 50%), hsl(220 90% 60%));
+    --gradient-accent: linear-gradient(135deg, hsl(280 85% 60%), hsl(320 85% 65%));
+    --gradient-neural: linear-gradient(45deg, hsl(240 85% 60%), hsl(200 90% 50%), hsl(280 85% 60%));
+    
+    /* Card and surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 220 26% 14%;
+    --card-hover: 210 40% 96%;
+    
+    /* Interactive elements */
+    --primary: 240 85% 60%;
+    --primary-foreground: 210 40% 98%;
+    --primary-glow: 240 85% 65%;
+    
+    --secondary: 210 30% 92%;
+    --secondary-foreground: 220 26% 14%;
+    
+    --accent: 280 85% 60%;
+    --accent-foreground: 210 40% 98%;
+    --accent-glow: 280 85% 65%;
+    
+    /* Semantic colors */
+    --success: 142 76% 36%;
+    --success-glow: 142 76% 45%;
+    --warning: 38 92% 50%;
+    --error: 0 84% 60%;
+    
+    /* Text and borders */
+    --muted: 210 30% 92%;
+    --muted-foreground: 220 9% 46%;
+    --border: 220 20% 88%;
+    --input: 220 20% 96%;
+    --ring: 240 85% 60%;
+    
+    /* Special effects */
+    --glow-primary: 0 0 20px hsl(240 85% 60% / 0.2);
+    --glow-accent: 0 0 20px hsl(280 85% 60% / 0.2);
+    --shadow-glass: 0 8px 32px hsl(240 85% 60% / 0.08);
+    --shadow-neural: 0 25px 50px hsl(240 85% 60% / 0.12);
   }
 }
 
