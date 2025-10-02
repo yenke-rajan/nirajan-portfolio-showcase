@@ -103,7 +103,16 @@ const HeroSection = () => {
               <Button 
                 size="lg" 
                 className="btn-glow bg-gradient-primary border-0 hover:shadow-glow-primary px-8 py-4 text-lg"
-                onClick={() => window.open('https://wa.me/9779813293267', '_blank')}
+                onClick={() => {
+                  const phoneNumber = profile?.phone_number;
+                  if (phoneNumber) {
+                    // Remove any non-digit characters and ensure it starts with country code
+                    const cleanNumber = phoneNumber.replace(/\D/g, '');
+                    window.open(`https://wa.me/${cleanNumber}`, '_blank');
+                  } else {
+                    alert('Phone number not available. Please add it in the Admin Dashboard.');
+                  }
+                }}
               >
                 <MessageCircle className="mr-2 h-5 w-5" />
                 Chat with Me

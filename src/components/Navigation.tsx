@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
+import { supabase } from '@/integrations/supabase/client';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +15,36 @@ const Navigation = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('phone_number')
+        .limit(1)
+        .maybeSingle();
+
+      if (error) throw error;
+      setProfile(data);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
+
+  const handleChatClick = () => {
+    const phoneNumber = profile?.phone_number;
+    if (phoneNumber) {
+      // Remove any non-digit characters and ensure it starts with country code
+      const cleanNumber = phoneNumber.replace(/\D/g, '');
+      window.open(`https://wa.me/${cleanNumber}`, '_blank');
+    } else {
+      alert('Phone number not available. Please add it in the Admin Dashboard.');
+    }
+  };
 
   const navItems = [
     { href: '#home', label: 'Home' },
@@ -56,6 +88,7 @@ const Navigation = () => {
             <Button 
               variant="default" 
               className="btn-glow bg-gradient-primary border-0 hover:shadow-glow-primary"
+              onClick={handleChatClick}
             >
               Chat with Me
             </Button>
@@ -92,6 +125,7 @@ const Navigation = () => {
                 <Button 
                   variant="default" 
                   className="w-full btn-glow bg-gradient-primary border-0"
+                  onClick={handleChatClick}
                 >
                   Chat with Me
                 </Button>
