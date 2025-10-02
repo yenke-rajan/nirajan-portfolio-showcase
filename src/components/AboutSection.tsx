@@ -4,11 +4,19 @@ import { Badge } from './ui/badge';
 import { MapPin, GraduationCap, Calendar, Code2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
+interface Skill {
+  id: string;
+  name: string;
+  category: string;
+}
+
 const AboutSection = () => {
   const [profile, setProfile] = useState<any>(null);
+  const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
     loadProfile();
+    loadSkills();
   }, []);
 
   const loadProfile = async () => {
@@ -26,17 +34,25 @@ const AboutSection = () => {
     }
   };
 
+  const loadSkills = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('skills')
+        .select('id, name, category')
+        .order('order_index', { ascending: true });
+
+      if (error) throw error;
+      setSkills(data || []);
+    } catch (error) {
+      console.error('Error loading skills:', error);
+    }
+  };
+
   const stats = [
     { number: "6th", label: "Semester", icon: GraduationCap },
     { number: "3+", label: "Years Coding", icon: Code2 },
     { number: "10+", label: "Projects", icon: Calendar },
     { number: profile?.location || "Nepal", label: "Based in", icon: MapPin },
-  ];
-
-  const interests = [
-    "Data Science", "Machine Learning", "Deep Learning", "Computer Vision",
-    "Natural Language Processing", "Statistical Analysis", "Data Visualization",
-    "Web Development", "Cloud Computing", "Open Source"
   ];
 
   return (
@@ -77,25 +93,27 @@ const AboutSection = () => {
               </CardContent>
             </Card>
 
-            {/* Interests - Now sourced from Skills table */}
-            <Card className="glass">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-gradient mb-6">Interests & Expertise</h3>
-                <p className="text-muted-foreground mb-4">Check out the Skills section below for my detailed expertise areas</p>
-                <div className="flex flex-wrap gap-2">
-                  {interests.map((interest, index) => (
-                    <Badge 
-                      key={interest}
-                      variant="secondary"
-                      className="glass hover:bg-primary/20 transition-colors duration-300 cursor-pointer hover-lift"
-                      style={{ animationDelay: `${index * 100}ms` }}
-                    >
-                      {interest}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            {/* Interests & Expertise - Dynamically loaded from Skills table */}
+            {skills.length > 0 && (
+              <Card className="glass">
+                <CardContent className="p-8">
+                  <h3 className="text-2xl font-bold text-gradient mb-6">Interests & Expertise</h3>
+                  <p className="text-muted-foreground mb-4">Check out the Skills section below for my detailed expertise areas</p>
+                  <div className="flex flex-wrap gap-2">
+                    {skills.map((skill, index) => (
+                      <Badge 
+                        key={skill.id}
+                        variant="secondary"
+                        className="glass hover:bg-primary/20 transition-colors duration-300 cursor-pointer hover-lift"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
+                        {skill.name}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Stats */}
