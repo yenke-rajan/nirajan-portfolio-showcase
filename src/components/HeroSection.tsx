@@ -10,6 +10,7 @@ const HeroSection = () => {
   const [displayText, setDisplayText] = useState('');
   const [profileClicked, setProfileClicked] = useState(false);
   const [profile, setProfile] = useState<any>(null);
+  const [photoPosition, setPhotoPosition] = useState<'left' | 'right'>('right');
   const { theme, setTheme } = useTheme();
   const fullText = "Heyy there!! You can call me the Sherlock Holmes of data.";
 
@@ -153,18 +154,18 @@ const HeroSection = () => {
               <div className="absolute inset-0 bg-gradient-primary rounded-full blur-xl opacity-20 animate-glow-pulse"></div>
               
               {/* Slider Container */}
-              <div className="relative w-[400px] h-80 lg:w-[480px] lg:h-96 bg-muted/20 rounded-full glass cursor-pointer overflow-hidden" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+              <div className="relative w-[400px] h-80 lg:w-[480px] lg:h-96 bg-muted/20 rounded-full glass cursor-pointer overflow-hidden" onClick={() => setPhotoPosition(photoPosition === 'right' ? 'left' : 'right')}>
                 
                 {/* Slider Track Background */}
                 <div className={`absolute inset-0 transition-all duration-500 rounded-full ${
-                  theme === 'light' 
+                  photoPosition === 'right' 
                     ? 'bg-gradient-to-r from-yellow-400/20 to-orange-400/20' 
                     : 'bg-gradient-to-r from-indigo-600/20 to-purple-600/20'
                 }`}></div>
                 
                 {/* Profile Image - Slides from left to right */}
                 <div className={`absolute top-4 transition-all duration-500 ease-in-out ${
-                  theme === 'light' 
+                  photoPosition === 'right' 
                     ? 'right-4 transform-none' 
                     : 'left-4 transform-none'
                 }`}>
@@ -177,30 +178,30 @@ const HeroSection = () => {
                 
                 {/* Theme Icons */}
                 <div className={`absolute top-1/2 left-6 transform -translate-y-1/2 transition-all duration-300 ${
-                  theme === 'dark' ? 'opacity-100 scale-100' : 'opacity-30 scale-75'
+                  photoPosition === 'left' ? 'opacity-100 scale-100' : 'opacity-30 scale-75'
                 }`}>
                   <Moon className="h-8 w-8 text-indigo-400" />
                 </div>
                 <div className={`absolute top-1/2 right-6 transform -translate-y-1/2 transition-all duration-300 ${
-                  theme === 'light' ? 'opacity-100 scale-100' : 'opacity-30 scale-75'
+                  photoPosition === 'right' ? 'opacity-100 scale-100' : 'opacity-30 scale-75'
                 }`}>
                   <Sun className="h-8 w-8 text-yellow-500" />
                 </div>
                 
                 {/* Slider Indicator */}
                 <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-2 bg-background/80 backdrop-blur-sm rounded-full px-4 py-2">
-                  <div className={`w-3 h-3 rounded-full transition-all duration-300 ${theme === 'dark' ? 'bg-indigo-400' : 'bg-muted-foreground/50'}`}></div>
+                  <div className={`w-3 h-3 rounded-full transition-all duration-300 ${photoPosition === 'left' ? 'bg-indigo-400' : 'bg-muted-foreground/50'}`}></div>
                   <div className="w-8 h-1 bg-muted-foreground/30 rounded-full relative">
                     <div className={`absolute top-0 w-3 h-1 bg-primary rounded-full transition-transform duration-500 ${
-                      theme === 'light' ? 'translate-x-5' : 'translate-x-0'
+                      photoPosition === 'right' ? 'translate-x-5' : 'translate-x-0'
                     }`}></div>
                   </div>
-                  <div className={`w-3 h-3 rounded-full transition-all duration-300 ${theme === 'light' ? 'bg-yellow-500' : 'bg-muted-foreground/50'}`}></div>
+                  <div className={`w-3 h-3 rounded-full transition-all duration-300 ${photoPosition === 'right' ? 'bg-yellow-500' : 'bg-muted-foreground/50'}`}></div>
                 </div>
                 
                 {/* Click hint text */}
                 <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground">
-                  Click to toggle theme
+                  Click to slide photo
                 </div>
               </div>
               
