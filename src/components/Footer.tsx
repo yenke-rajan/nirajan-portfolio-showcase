@@ -86,13 +86,13 @@ const Footer = () => {
         }}></div>
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-16">
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8 mb-12">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
           {/* Brand Section */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="space-y-4">
-              <h3 className="text-3xl font-bold text-gradient">Nirajan Khatiwada</h3>
-              <p className="text-muted-foreground leading-relaxed max-w-md">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-2xl sm:text-3xl font-bold text-gradient">Nirajan Khatiwada</h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-md">
                 Data Science enthusiast turning raw data into meaningful insights. 
                 Currently pursuing Bsc. CSIT and building the future, one algorithm at a time.
               </p>
@@ -114,14 +114,14 @@ const Footer = () => {
             </div>
 
             {/* Fun Quote */}
-            <div className="text-sm text-accent italic">
+            <div className="text-xs sm:text-sm text-accent italic">
               "Data is the compass that guides us through the wilderness of uncertainty."
             </div>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-foreground">Quick Links</h4>
+          <div className="space-y-3 sm:space-y-4">
+            <h4 className="text-base sm:text-lg font-semibold text-foreground">Quick Links</h4>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.label}>
@@ -137,8 +137,8 @@ const Footer = () => {
           </div>
 
           {/* Project Links */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-foreground">Portfolio</h4>
+          <div className="space-y-3 sm:space-y-4">
+            <h4 className="text-base sm:text-lg font-semibold text-foreground">Portfolio</h4>
             <ul className="space-y-2">
               {projectLinks.map((link) => (
                 <li key={link.label}>

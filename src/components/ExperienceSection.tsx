@@ -107,14 +107,14 @@ const ExperienceSection = () => {
   };
 
   return (
-    <section id="experience" className="py-20 relative">
-      <div className="container mx-auto px-4">
+    <section id="experience" className="py-12 sm:py-16 lg:py-20 relative">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
-        <div className="text-center mb-16 fade-in-up">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+        <div className="text-center mb-12 sm:mb-16 fade-in-up">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
             <span className="text-gradient">Experience & Organizations</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
             My journey through internships, leadership roles, and organizational contributions
           </p>
         </div>
@@ -125,7 +125,7 @@ const ExperienceSection = () => {
           <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-primary via-accent to-primary opacity-30"></div>
 
           {/* Experience Cards */}
-          <div className="space-y-12">
+          <div className="space-y-8 sm:space-y-12">
             {experiences.map((exp, index) => (
               <div 
                 key={index}
@@ -142,27 +142,27 @@ const ExperienceSection = () => {
                 {/* Content */}
                 <div className={`w-full lg:w-5/12 ${index % 2 === 0 ? 'lg:pr-8' : 'lg:pl-8'}`}>
                   <Card className="glass hover-lift group cursor-pointer">
-                    <CardContent className="p-8">
+                    <CardContent className="p-4 sm:p-6 lg:p-8">
                       {/* Header */}
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="space-y-2">
+                      <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
+                        <div className="space-y-2 flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <Building2 className="h-5 w-5 text-primary" />
-                            <h3 className="text-xl font-bold text-gradient group-hover:scale-105 transition-transform duration-300">
+                            <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                            <h3 className="text-lg sm:text-xl font-bold text-gradient group-hover:scale-105 transition-transform duration-300 truncate">
                               {exp.company}
                             </h3>
                           </div>
-                          <p className="text-lg font-semibold text-foreground">
+                          <p className="text-base sm:text-lg font-semibold text-foreground">
                             {exp.position}
                           </p>
                         </div>
-                        <Badge variant="secondary" className="glass">
+                        <Badge variant="secondary" className="glass text-xs flex-shrink-0">
                           {exp.experience_type}
                         </Badge>
                       </div>
 
                       {/* Meta Info */}
-                      <div className="flex flex-wrap gap-4 mb-4 text-sm text-muted-foreground">
+                      <div className="flex flex-wrap gap-3 sm:gap-4 mb-3 sm:mb-4 text-xs sm:text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4" />
                           {exp.duration}
@@ -174,12 +174,12 @@ const ExperienceSection = () => {
                       </div>
 
                       {/* Description */}
-                      <p className="text-muted-foreground mb-6 leading-relaxed">
+                      <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
                         {exp.description}
                       </p>
 
                       {/* Technologies */}
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         {exp.technologies.map((tech) => (
                           <Badge 
                             key={tech}
@@ -205,12 +205,12 @@ const ExperienceSection = () => {
         </div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-16 fade-in-up animation-delay-600">
+        <div className="text-center mt-12 sm:mt-16 fade-in-up animation-delay-600">
           <Card className="glass inline-block">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <span className="text-lg text-gradient font-medium">Interested in collaborating?</span>
-                <ExternalLink className="h-5 w-5 text-accent animate-bounce" />
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
+                <span className="text-base sm:text-lg text-gradient font-medium">Interested in collaborating?</span>
+                <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5 text-accent animate-bounce" />
               </div>
             </CardContent>
           </Card>

@@ -76,36 +76,36 @@ const SkillsSection = () => {
   };
 
   return (
-    <section id="skills" className="py-20 relative">
-      <div className="container mx-auto px-4">
+    <section id="skills" className="py-12 sm:py-16 lg:py-20 relative">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
-        <div className="text-center mb-16 fade-in-up">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+        <div className="text-center mb-12 sm:mb-16 fade-in-up">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
             <span className="text-gradient">My Skills</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
             Expertise across the data science spectrum, from analysis to visualization
           </p>
         </div>
 
         {/* Featured Skills Display */}
         {featuredSkills.length > 0 && (
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
             {featuredSkills.map((skill, index) => (
               <Card 
                 key={skill.id}
                 className={`glass hover-lift cursor-pointer group fade-in-up transition-all duration-500`}
                 style={{ animationDelay: `${index * 200}ms` }}
               >
-                <CardContent className="p-8 text-center space-y-6">
+                <CardContent className="p-6 sm:p-8 text-center space-y-4 sm:space-y-6">
                   {/* Icon */}
                   <div className="relative">
-                    <div className={`w-20 h-20 mx-auto rounded-full ${gradients[index % 3]} p-0.5 animate-glow-pulse`}>
+                    <div className={`w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full ${gradients[index % 3]} p-0.5 animate-glow-pulse`}>
                       <div className="w-full h-full bg-card rounded-full flex items-center justify-center">
                         <img 
                           src={skill.image_url} 
                           alt={skill.title}
-                          className="w-12 h-12 object-contain opacity-90 group-hover:scale-110 transition-transform duration-300"
+                          className="w-10 h-10 sm:w-12 sm:h-12 object-contain opacity-90 group-hover:scale-110 transition-transform duration-300"
                         />
                       </div>
                     </div>
@@ -116,12 +116,12 @@ const SkillsSection = () => {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-2xl font-bold text-gradient group-hover:scale-105 transition-transform duration-300">
+                  <h3 className="text-xl sm:text-2xl font-bold text-gradient group-hover:scale-105 transition-transform duration-300">
                     {skill.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                     {skill.description}
                   </p>
 

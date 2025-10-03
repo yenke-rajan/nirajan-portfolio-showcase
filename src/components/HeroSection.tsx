@@ -76,33 +76,33 @@ const HeroSection = () => {
         ))}
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 min-h-screen flex items-center">
-        <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 min-h-screen flex items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full py-20 lg:py-0">
           {/* Text Content */}
-          <div className="space-y-8 fade-in-left">
+          <div className="space-y-6 sm:space-y-8 fade-in-left text-center lg:text-left">
             <div className="space-y-4">
-              <h1 className="text-5xl lg:text-7xl font-bold">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold">
                 <span className="text-gradient">Nirajan</span>
                 <br />
                 <span className="text-foreground">Khatiwada</span>
               </h1>
               
-              <div className="text-xl lg:text-2xl text-muted-foreground min-h-[3rem]">
+              <div className="text-lg sm:text-xl lg:text-2xl text-muted-foreground min-h-[3rem]">
                 <span className="inline-block border-r-2 border-primary animate-pulse">
                   {displayText}
                 </span>
               </div>
               
-              <p className="text-lg text-muted-foreground max-w-lg">
+              <p className="text-base sm:text-lg text-muted-foreground max-w-lg mx-auto lg:mx-0">
                 {profile?.bio || "A man who will need no introduction in the near future, but for now a 6th semester Bsc. CSIT student hustling to create some chaos in the field of Data Science."}
               </p>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button 
                 size="lg" 
-                className="btn-glow bg-gradient-primary border-0 hover:shadow-glow-primary px-8 py-4 text-lg"
+                className="btn-glow bg-gradient-primary border-0 hover:shadow-glow-primary px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto"
                 onClick={() => {
                   const phoneNumber = profile?.phone_number;
                   if (phoneNumber) {
@@ -121,7 +121,7 @@ const HeroSection = () => {
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="glass border-primary/30 hover:bg-primary/10 px-8 py-4 text-lg"
+                className="glass border-primary/30 hover:bg-primary/10 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto"
                 onClick={async () => {
                   try {
                     // Get the latest CV file
@@ -156,19 +156,19 @@ const HeroSection = () => {
             </div>
 
             {/* Fun Prediction Text */}
-            <div className="text-sm text-accent animate-pulse">
+            <div className="text-xs sm:text-sm text-accent animate-pulse">
               btw, I predicted your visit to this site before 2 seconds ✨
             </div>
           </div>
 
           {/* Profile Image Slider */}
-          <div className="relative fade-in-right animation-delay-400">
-            <div className="relative">
+          <div className="relative fade-in-right animation-delay-400 flex justify-center lg:justify-end">
+            <div className="relative w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[480px]">
               {/* Glow Effect */}
               <div className="absolute inset-0 bg-gradient-primary rounded-full blur-xl opacity-20 animate-glow-pulse"></div>
               
               {/* Slider Container */}
-              <div className="relative w-[400px] h-80 lg:w-[480px] lg:h-96 bg-muted/20 rounded-full glass cursor-pointer overflow-hidden" onClick={handlePhotoClick}>
+              <div className="relative w-full aspect-[5/4] bg-muted/20 rounded-full glass cursor-pointer overflow-hidden" onClick={handlePhotoClick}>
                 
                 {/* Slider Track Background */}
                 <div className={`absolute inset-0 transition-all duration-500 rounded-full ${
@@ -178,28 +178,28 @@ const HeroSection = () => {
                 }`}></div>
                 
                 {/* Profile Image - Slides from left to right */}
-                <div className={`absolute top-4 transition-all duration-500 ease-in-out ${
+                <div className={`absolute top-2 sm:top-4 transition-all duration-500 ease-in-out ${
                   photoPosition === 'right' 
-                    ? 'right-4 transform-none' 
-                    : 'left-4 transform-none'
+                    ? 'right-2 sm:right-4 transform-none' 
+                    : 'left-2 sm:left-4 transform-none'
                 }`}>
                   <img
                     src={profile?.avatar_url || profilePhoto}
                     alt={profile?.display_name || "Nirajan Khatiwada"}
-                    className="w-72 h-72 lg:w-80 lg:h-80 rounded-full object-cover border-4 border-primary/20"
+                    className="w-56 h-56 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full object-cover border-4 border-primary/20"
                   />
                 </div>
                 
                 {/* Theme Icons */}
-                <div className={`absolute top-1/2 left-6 transform -translate-y-1/2 transition-all duration-300 ${
+                <div className={`absolute top-1/2 left-3 sm:left-6 transform -translate-y-1/2 transition-all duration-300 ${
                   photoPosition === 'left' ? 'opacity-100 scale-100' : 'opacity-30 scale-75'
                 }`}>
-                  <Moon className="h-8 w-8 text-indigo-400" />
+                  <Moon className="h-6 w-6 sm:h-8 sm:w-8 text-indigo-400" />
                 </div>
-                <div className={`absolute top-1/2 right-6 transform -translate-y-1/2 transition-all duration-300 ${
+                <div className={`absolute top-1/2 right-3 sm:right-6 transform -translate-y-1/2 transition-all duration-300 ${
                   photoPosition === 'right' ? 'opacity-100 scale-100' : 'opacity-30 scale-75'
                 }`}>
-                  <Sun className="h-8 w-8 text-yellow-500" />
+                  <Sun className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500" />
                 </div>
                 
                 {/* Slider Indicator */}
@@ -214,14 +214,14 @@ const HeroSection = () => {
                 </div>
                 
                 {/* Click hint text */}
-                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground">
+                <div className="absolute -bottom-6 sm:-bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground whitespace-nowrap">
                   Click to toggle theme
                 </div>
               </div>
               
               {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-accent rounded-full animate-float animation-delay-200"></div>
-              <div className="absolute -bottom-8 -left-8 w-6 h-6 bg-primary rounded-full animate-float animation-delay-600"></div>
+              <div className="absolute -top-2 sm:-top-4 -right-2 sm:-right-4 w-6 h-6 sm:w-8 sm:h-8 bg-accent rounded-full animate-float animation-delay-200"></div>
+              <div className="absolute -bottom-4 sm:-bottom-8 -left-4 sm:-left-8 w-4 h-4 sm:w-6 sm:h-6 bg-primary rounded-full animate-float animation-delay-600"></div>
             </div>
           </div>
         </div>

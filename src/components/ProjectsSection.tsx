@@ -57,20 +57,20 @@ const ProjectsSection = () => {
   }
 
   return (
-    <section id="projects" className="py-20 relative">
-      <div className="container mx-auto px-4">
+    <section id="projects" className="py-12 sm:py-16 lg:py-20 relative">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
-        <div className="text-center mb-16 fade-in-up">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+        <div className="text-center mb-12 sm:mb-16 fade-in-up">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
             <span className="text-gradient">Featured Projects</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
             A showcase of my latest work in data science, machine learning, and web development
           </p>
         </div>
 
         {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {projects.map((project, index) => (
             <Card 
               key={project.id}
@@ -119,10 +119,10 @@ const ProjectsSection = () => {
                 </div>
               </div>
 
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 {/* Project Header */}
-                <div className="space-y-3 mb-4">
-                  <h3 className="text-xl font-bold text-gradient group-hover:scale-105 transition-transform duration-300">
+                <div className="space-y-2 sm:space-y-3 mb-3 sm:mb-4">
+                  <h3 className="text-lg sm:text-xl font-bold text-gradient group-hover:scale-105 transition-transform duration-300">
                     {project.title}
                   </h3>
                   
@@ -140,12 +140,12 @@ const ProjectsSection = () => {
                 </div>
 
                 {/* Description */}
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+                <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4">
                   {project.description}
                 </p>
 
                 {/* Technologies */}
-                <div className="flex flex-wrap gap-2 mb-6">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6">
                   {project.technologies?.map((tech: string) => (
                     <Badge 
                       key={tech}
@@ -190,17 +190,17 @@ const ProjectsSection = () => {
         </div>
 
         {/* Load More Section */}
-        <div className="text-center mt-16 fade-in-up animation-delay-600">
+        <div className="text-center mt-12 sm:mt-16 fade-in-up animation-delay-600">
           <div className="space-y-4">
-            <p className="text-muted-foreground">
+            <p className="text-sm sm:text-base text-muted-foreground px-4">
               Want to see more projects? Check out my GitHub for the complete collection.
             </p>
             <Button 
               variant="outline" 
-              className="glass border-primary/30 hover:bg-primary/10 px-8 py-3"
+              className="glass border-primary/30 hover:bg-primary/10 px-6 sm:px-8 py-2 sm:py-3"
               onClick={() => window.open('https://github.com/yenke-rajan', '_blank')}
             >
-              <Github className="h-5 w-5 mr-2" />
+              <Github className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
               View All Projects
             </Button>
           </div>
