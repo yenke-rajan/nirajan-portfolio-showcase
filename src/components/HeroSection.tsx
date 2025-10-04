@@ -40,7 +40,7 @@ const HeroSection = () => {
   const loadProfile = async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('public_profiles')
         .select('*')
         .limit(1)
         .maybeSingle();

@@ -23,8 +23,8 @@ const Navigation = () => {
   const loadProfile = async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
-        .select('phone_number')
+        .from('public_profiles')
+        .select('*')
         .limit(1)
         .maybeSingle();
 
