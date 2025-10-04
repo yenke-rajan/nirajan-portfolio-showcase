@@ -49,9 +49,9 @@ const AboutSection = () => {
   };
 
   const stats = [
-    { number: "6th", label: "Semester", icon: GraduationCap },
-    { number: "3+", label: "Years Coding", icon: Code2 },
-    { number: "10+", label: "Projects", icon: Calendar },
+    { number: profile?.semester || "6th", label: "Semester", icon: GraduationCap },
+    { number: profile?.years_coding || "3+", label: "Years Coding", icon: Code2 },
+    { number: profile?.projects_count || "10+", label: "Projects", icon: Calendar },
     { number: profile?.location || "Nepal", label: "Based in", icon: MapPin },
   ];
 

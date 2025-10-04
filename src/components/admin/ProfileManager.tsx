@@ -23,6 +23,9 @@ interface Profile {
   linkedin_url: string;
   twitter_url: string;
   instagram_url: string;
+  semester: string;
+  years_coding: string;
+  projects_count: string;
 }
 
 export function ProfileManager() {
@@ -40,6 +43,9 @@ export function ProfileManager() {
     linkedin_url: '',
     twitter_url: '',
     instagram_url: '',
+    semester: '6th',
+    years_coding: '3+',
+    projects_count: '10+',
   });
   const [loading, setLoading] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -77,6 +83,9 @@ export function ProfileManager() {
           linkedin_url: data.linkedin_url || '',
           twitter_url: data.twitter_url || '',
           instagram_url: data.instagram_url || '',
+          semester: data.semester || '6th',
+          years_coding: data.years_coding || '3+',
+          projects_count: data.projects_count || '10+',
         });
       }
     } catch (error) {
@@ -289,6 +298,38 @@ export function ProfileManager() {
           placeholder="Tell your story..."
           rows={5}
         />
+      </div>
+
+      {/* About Section Stats */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">About Section Stats</h3>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">Semester</label>
+          <Input
+            value={profile.semester}
+            onChange={(e) => handleChange('semester', e.target.value)}
+            placeholder="e.g., 6th"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">Years Coding</label>
+          <Input
+            value={profile.years_coding}
+            onChange={(e) => handleChange('years_coding', e.target.value)}
+            placeholder="e.g., 3+"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">Projects Count</label>
+          <Input
+            value={profile.projects_count}
+            onChange={(e) => handleChange('projects_count', e.target.value)}
+            placeholder="e.g., 10+"
+          />
+        </div>
       </div>
 
       {/* Profile Links Section */}

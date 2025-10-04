@@ -164,9 +164,12 @@ export type Database = {
           location: string | null
           my_story: string | null
           phone_number: string | null
+          projects_count: string | null
+          semester: string | null
           twitter_url: string | null
           updated_at: string
           user_id: string
+          years_coding: string | null
           youtube_channel_id: string | null
         }
         Insert: {
@@ -183,9 +186,12 @@ export type Database = {
           location?: string | null
           my_story?: string | null
           phone_number?: string | null
+          projects_count?: string | null
+          semester?: string | null
           twitter_url?: string | null
           updated_at?: string
           user_id: string
+          years_coding?: string | null
           youtube_channel_id?: string | null
         }
         Update: {
@@ -202,9 +208,12 @@ export type Database = {
           location?: string | null
           my_story?: string | null
           phone_number?: string | null
+          projects_count?: string | null
+          semester?: string | null
           twitter_url?: string | null
           updated_at?: string
           user_id?: string
+          years_coding?: string | null
           youtube_channel_id?: string | null
         }
         Relationships: []
