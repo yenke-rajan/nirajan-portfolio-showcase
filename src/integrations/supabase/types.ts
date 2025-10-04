@@ -358,7 +358,66 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_profiles: {
+        Row: {
+          about_me: string | null
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          display_name: string | null
+          github_url: string | null
+          id: string | null
+          instagram_url: string | null
+          linkedin_url: string | null
+          location: string | null
+          my_story: string | null
+          projects_count: string | null
+          semester: string | null
+          twitter_url: string | null
+          updated_at: string | null
+          user_id: string | null
+          years_coding: string | null
+        }
+        Insert: {
+          about_me?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          github_url?: string | null
+          id?: string | null
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          location?: string | null
+          my_story?: string | null
+          projects_count?: string | null
+          semester?: string | null
+          twitter_url?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          years_coding?: string | null
+        }
+        Update: {
+          about_me?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          github_url?: string | null
+          id?: string | null
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          location?: string | null
+          my_story?: string | null
+          projects_count?: string | null
+          semester?: string | null
+          twitter_url?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          years_coding?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
