@@ -108,6 +108,7 @@ export function ProfileManager() {
       const validation = profileSchema.safeParse(profile);
       
       if (!validation.success) {
+        console.log('Validation errors:', validation.error.issues);
         const formErrors: Partial<ProfileData> = {};
         validation.error.issues.forEach((issue) => {
           if (issue.path.length > 0) {
