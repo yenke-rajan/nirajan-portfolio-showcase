@@ -37,9 +37,11 @@ export const profileSchema = z.object({
     .optional(),
   phone_number: z.string()
     .trim()
-    .regex(/^[\+]?[1-9][\d]{0,15}$/, 'Please enter a valid phone number')
-    .max(20, 'Phone number must be less than 20 characters')
     .optional()
+    .refine(
+      (val) => !val || /^[\+]?[1-9][\d]{0,15}$/.test(val),
+      'Please enter a valid phone number'
+    )
     .or(z.literal('')),
   email_contact: z.string()
     .trim()
