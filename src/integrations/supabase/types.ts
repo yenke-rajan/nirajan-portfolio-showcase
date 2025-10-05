@@ -365,12 +365,14 @@ export type Database = {
           bio: string | null
           created_at: string | null
           display_name: string | null
+          email_contact: string | null
           github_url: string | null
           id: string | null
           instagram_url: string | null
           linkedin_url: string | null
           location: string | null
           my_story: string | null
+          phone_number: string | null
           projects_count: string | null
           semester: string | null
           twitter_url: string | null
@@ -384,12 +386,14 @@ export type Database = {
           bio?: string | null
           created_at?: string | null
           display_name?: string | null
+          email_contact?: string | null
           github_url?: string | null
           id?: string | null
           instagram_url?: string | null
           linkedin_url?: string | null
           location?: string | null
           my_story?: string | null
+          phone_number?: string | null
           projects_count?: string | null
           semester?: string | null
           twitter_url?: string | null
@@ -403,12 +407,14 @@ export type Database = {
           bio?: string | null
           created_at?: string | null
           display_name?: string | null
+          email_contact?: string | null
           github_url?: string | null
           id?: string | null
           instagram_url?: string | null
           linkedin_url?: string | null
           location?: string | null
           my_story?: string | null
+          phone_number?: string | null
           projects_count?: string | null
           semester?: string | null
           twitter_url?: string | null
