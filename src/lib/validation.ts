@@ -79,7 +79,19 @@ export const profileSchema = z.object({
     .refine(url => url.includes('instagram.com'), 'Must be an Instagram URL')
     .optional()
     .or(z.literal('')),
-  avatar_url: z.string().optional()
+  avatar_url: z.string().optional(),
+  semester: z.string()
+    .trim()
+    .max(50, 'Semester must be less than 50 characters')
+    .optional(),
+  years_coding: z.string()
+    .trim()
+    .max(50, 'Years coding must be less than 50 characters')
+    .optional(),
+  projects_count: z.string()
+    .trim()
+    .max(50, 'Projects count must be less than 50 characters')
+    .optional()
 });
 
 // Skills validation schema
