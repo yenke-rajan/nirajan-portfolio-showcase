@@ -8,7 +8,24 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Plus, Edit, Trash, X, Upload } from 'lucide-react';
+import { Plus, Edit, Trash, X, Upload, GripVertical } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface Post {
   id?: string;
@@ -21,6 +38,76 @@ interface Post {
   featured: boolean;
   published: boolean;
   read_time: string;
+}
+
+function SortablePostItem({ post, onEdit, onDelete }: { 
+  post: any; 
+  onEdit: (post: any) => void; 
+  onDelete: (id: string) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: post.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <Card ref={setNodeRef} style={style}>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing">
+              <GripVertical className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <span>
+              {post.title} 
+              {post.featured && <Badge className="ml-2">Featured</Badge>}
+              {!post.published && <Badge variant="secondary" className="ml-2">Draft</Badge>}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" onClick={() => onEdit(post)}>
+              <Edit className="w-4 h-4" />
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => onDelete(post.id)}>
+              <Trash className="w-4 h-4" />
+            </Button>
+          </div>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex gap-4">
+          {post.image_url && (
+            <img 
+              src={post.image_url} 
+              alt={post.title}
+              className="w-32 h-20 object-cover rounded"
+            />
+          )}
+          <div className="flex-1">
+            <p className="text-sm mb-2">{post.excerpt}</p>
+            <div className="flex flex-wrap gap-2 mb-2">
+              {post.tags?.map((tag: string, index: number) => (
+                <Badge key={index} variant="outline" className="text-xs">{tag}</Badge>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {post.category} • {post.read_time}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 export function PostManager() {
@@ -193,6 +280,42 @@ export function PostManager() {
     }));
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = posts.findIndex((post) => post.id === active.id);
+      const newIndex = posts.findIndex((post) => post.id === over.id);
+
+      const reorderedPosts = arrayMove(posts, oldIndex, newIndex);
+      setPosts(reorderedPosts);
+
+      // Update order_index in database
+      try {
+        const updates = reorderedPosts.map((post, index) => 
+          supabase
+            .from('posts')
+            .update({ order_index: reorderedPosts.length - index })
+            .eq('id', post.id)
+        );
+
+        await Promise.all(updates);
+        toast.success('Order updated!');
+      } catch (error) {
+        console.error('Error updating order:', error);
+        toast.error('Failed to update order');
+        loadPosts();
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-lg">
@@ -323,51 +446,27 @@ export function PostManager() {
         </div>
       </form>
 
-      <div className="space-y-4">
-        {posts.map((post) => (
-          <Card key={post.id}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>
-                  {post.title} 
-                  {post.featured && <Badge className="ml-2">Featured</Badge>}
-                  {!post.published && <Badge variant="secondary" className="ml-2">Draft</Badge>}
-                </span>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => handleEdit(post)}>
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => handleDelete(post.id!)}>
-                    <Trash className="w-4 h-4" />
-                  </Button>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-4">
-                {post.image_url && (
-                  <img 
-                    src={post.image_url} 
-                    alt={post.title}
-                    className="w-32 h-20 object-cover rounded"
-                  />
-                )}
-                <div className="flex-1">
-                  <p className="text-sm mb-2">{post.excerpt}</p>
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {post.tags?.map((tag, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">{tag}</Badge>
-                    ))}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {post.category} • {post.read_time}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={posts.map(post => post.id!)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="space-y-4">
+            {posts.map((post) => (
+              <SortablePostItem
+                key={post.id}
+                post={post}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }

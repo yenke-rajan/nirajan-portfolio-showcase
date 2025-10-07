@@ -8,7 +8,24 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Plus, Edit, Trash, X } from 'lucide-react';
+import { Plus, Edit, Trash, X, GripVertical } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface Experience {
   id?: string;
@@ -20,6 +37,61 @@ interface Experience {
   technologies: string[];
   experience_type: string;
   color: string;
+}
+
+function SortableExperienceItem({ experience, onEdit, onDelete }: { 
+  experience: any; 
+  onEdit: (exp: any) => void; 
+  onDelete: (id: string) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: experience.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <Card ref={setNodeRef} style={style}>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing">
+              <GripVertical className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <span>{experience.company} - {experience.position}</span>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" onClick={() => onEdit(experience)}>
+              <Edit className="w-4 h-4" />
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => onDelete(experience.id)}>
+              <Trash className="w-4 h-4" />
+            </Button>
+          </div>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-muted-foreground mb-2">
+          {experience.duration} • {experience.location}
+        </p>
+        <p className="mb-2">{experience.description}</p>
+        <div className="flex flex-wrap gap-2">
+          {experience.technologies?.map((tech: string, index: number) => (
+            <Badge key={index} variant="secondary">{tech}</Badge>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 export function ExperienceManager() {
@@ -156,6 +228,42 @@ export function ExperienceManager() {
     }));
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = experiences.findIndex((exp) => exp.id === active.id);
+      const newIndex = experiences.findIndex((exp) => exp.id === over.id);
+
+      const reorderedExperiences = arrayMove(experiences, oldIndex, newIndex);
+      setExperiences(reorderedExperiences);
+
+      // Update order_index in database
+      try {
+        const updates = reorderedExperiences.map((exp, index) => 
+          supabase
+            .from('experiences')
+            .update({ order_index: reorderedExperiences.length - index })
+            .eq('id', exp.id)
+        );
+
+        await Promise.all(updates);
+        toast.success('Order updated!');
+      } catch (error) {
+        console.error('Error updating order:', error);
+        toast.error('Failed to update order');
+        loadExperiences();
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-lg">
@@ -271,36 +379,27 @@ export function ExperienceManager() {
         </div>
       </form>
 
-      <div className="space-y-4">
-        {experiences.map((experience) => (
-          <Card key={experience.id}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>{experience.company} - {experience.position}</span>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => handleEdit(experience)}>
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => handleDelete(experience.id!)}>
-                    <Trash className="w-4 h-4" />
-                  </Button>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-2">
-                {experience.duration} • {experience.location}
-              </p>
-              <p className="mb-2">{experience.description}</p>
-              <div className="flex flex-wrap gap-2">
-                {experience.technologies?.map((tech, index) => (
-                  <Badge key={index} variant="secondary">{tech}</Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={experiences.map(exp => exp.id!)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="space-y-4">
+            {experiences.map((experience) => (
+              <SortableExperienceItem
+                key={experience.id}
+                experience={experience}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }

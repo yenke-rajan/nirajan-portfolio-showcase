@@ -6,7 +6,24 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Plus, Edit, Trash, RefreshCw } from 'lucide-react';
+import { Plus, Edit, Trash, RefreshCw, GripVertical } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface Video {
   id?: string;
@@ -19,6 +36,67 @@ interface Video {
   views: string;
   likes: string;
   published_at: string;
+}
+
+function SortableVideoItem({ video, onEdit, onDelete }: { 
+  video: any; 
+  onEdit: (vid: any) => void; 
+  onDelete: (id: string) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: video.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <Card ref={setNodeRef} style={style}>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing">
+              <GripVertical className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <span>{video.title}</span>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" onClick={() => onEdit(video)}>
+              <Edit className="w-4 h-4" />
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => onDelete(video.id)}>
+              <Trash className="w-4 h-4" />
+            </Button>
+          </div>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex gap-4">
+          {video.thumbnail_url && (
+            <img 
+              src={video.thumbnail_url} 
+              alt={video.title}
+              className="w-32 h-20 object-cover rounded"
+            />
+          )}
+          <div className="flex-1">
+            <p className="text-sm mb-2">{video.description}</p>
+            <p className="text-xs text-muted-foreground">
+              {video.duration} • {video.views} views • {video.likes} likes • {video.published_at}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 export function VideoManager() {
@@ -203,6 +281,42 @@ export function VideoManager() {
     });
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = videos.findIndex((vid) => vid.id === active.id);
+      const newIndex = videos.findIndex((vid) => vid.id === over.id);
+
+      const reorderedVideos = arrayMove(videos, oldIndex, newIndex);
+      setVideos(reorderedVideos);
+
+      // Update order_index in database
+      try {
+        const updates = reorderedVideos.map((vid, index) => 
+          supabase
+            .from('videos')
+            .update({ order_index: reorderedVideos.length - index })
+            .eq('id', vid.id)
+        );
+
+        await Promise.all(updates);
+        toast.success('Order updated!');
+      } catch (error) {
+        console.error('Error updating order:', error);
+        toast.error('Failed to update order');
+        loadVideos();
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-lg">
@@ -318,42 +432,27 @@ export function VideoManager() {
         </div>
       </form>
 
-      <div className="space-y-4">
-        {videos.map((video) => (
-          <Card key={video.id}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>{video.title}</span>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => handleEdit(video)}>
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => handleDelete(video.id!)}>
-                    <Trash className="w-4 h-4" />
-                  </Button>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-4">
-                {video.thumbnail_url && (
-                  <img 
-                    src={video.thumbnail_url} 
-                    alt={video.title}
-                    className="w-32 h-20 object-cover rounded"
-                  />
-                )}
-                <div className="flex-1">
-                  <p className="text-sm mb-2">{video.description}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {video.duration} • {video.views} views • {video.likes} likes • {video.published_at}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={videos.map(vid => vid.id!)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="space-y-4">
+            {videos.map((video) => (
+              <SortableVideoItem
+                key={video.id}
+                video={video}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }

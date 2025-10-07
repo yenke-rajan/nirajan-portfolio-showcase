@@ -8,7 +8,24 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Plus, Edit, Trash, X, RefreshCw } from 'lucide-react';
+import { Plus, Edit, Trash, X, RefreshCw, GripVertical } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface Project {
   id?: string;
@@ -22,6 +39,61 @@ interface Project {
   featured: boolean;
   github_stars: number;
   github_forks: number;
+}
+
+function SortableProjectItem({ project, onEdit, onDelete }: { 
+  project: any; 
+  onEdit: (proj: any) => void; 
+  onDelete: (id: string) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: project.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <Card ref={setNodeRef} style={style}>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing">
+              <GripVertical className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <span>{project.title} {project.featured && <Badge>Featured</Badge>}</span>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" onClick={() => onEdit(project)}>
+              <Edit className="w-4 h-4" />
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => onDelete(project.id)}>
+              <Trash className="w-4 h-4" />
+            </Button>
+          </div>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="mb-2">{project.description}</p>
+        <p className="text-sm text-muted-foreground mb-2">
+          ⭐ {project.github_stars} stars • 🍴 {project.github_forks} forks
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {project.technologies?.map((tech: string, index: number) => (
+            <Badge key={index} variant="secondary">{tech}</Badge>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 export function ProjectManager() {
@@ -221,6 +293,42 @@ export function ProjectManager() {
     }));
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = projects.findIndex((proj) => proj.id === active.id);
+      const newIndex = projects.findIndex((proj) => proj.id === over.id);
+
+      const reorderedProjects = arrayMove(projects, oldIndex, newIndex);
+      setProjects(reorderedProjects);
+
+      // Update order_index in database
+      try {
+        const updates = reorderedProjects.map((proj, index) => 
+          supabase
+            .from('projects')
+            .update({ order_index: reorderedProjects.length - index })
+            .eq('id', proj.id)
+        );
+
+        await Promise.all(updates);
+        toast.success('Order updated!');
+      } catch (error) {
+        console.error('Error updating order:', error);
+        toast.error('Failed to update order');
+        loadProjects();
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-lg">
@@ -370,36 +478,27 @@ export function ProjectManager() {
         </div>
       </form>
 
-      <div className="space-y-4">
-        {projects.map((project) => (
-          <Card key={project.id}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>{project.title} {project.featured && <Badge>Featured</Badge>}</span>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => handleEdit(project)}>
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => handleDelete(project.id!)}>
-                    <Trash className="w-4 h-4" />
-                  </Button>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-2">{project.description}</p>
-              <p className="text-sm text-muted-foreground mb-2">
-                ⭐ {project.github_stars} stars • 🍴 {project.github_forks} forks
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {project.technologies?.map((tech, index) => (
-                  <Badge key={index} variant="secondary">{tech}</Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={projects.map(proj => proj.id!)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="space-y-4">
+            {projects.map((project) => (
+              <SortableProjectItem
+                key={project.id}
+                project={project}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }
