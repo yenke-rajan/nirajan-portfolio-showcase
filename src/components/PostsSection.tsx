@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -152,10 +153,12 @@ const PostsSection = () => {
                     </div>
                   )}
 
-                  <Button className="btn-glow bg-gradient-primary border-0 w-fit">
-                    Read More
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
+                  <Link to={`/post/${featuredPost.id}`}>
+                    <Button className="btn-glow bg-gradient-primary border-0 w-fit">
+                      Read More
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </div>
@@ -165,11 +168,11 @@ const PostsSection = () => {
         {/* Posts Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {regularPosts.map((post, index) => (
-            <Card 
-              key={post.id}
-              className="glass hover-lift group cursor-pointer overflow-hidden fade-in-up"
-              style={{ animationDelay: `${(index + 1) * 200}ms` }}
-            >
+            <Link to={`/post/${post.id}`} key={post.id}>
+              <Card 
+                className="glass hover-lift group cursor-pointer overflow-hidden fade-in-up"
+                style={{ animationDelay: `${(index + 1) * 200}ms` }}
+              >
               {/* Post Image */}
               <div className="relative overflow-hidden">
                 <img 
@@ -242,6 +245,7 @@ const PostsSection = () => {
                 <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 rounded-lg transition-opacity duration-300"></div>
               </CardContent>
             </Card>
+            </Link>
           ))}
         </div>
 
