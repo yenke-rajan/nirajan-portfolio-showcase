@@ -10,6 +10,7 @@ const HeroSection = () => {
   const [displayText, setDisplayText] = useState('');
   const [profileClicked, setProfileClicked] = useState(false);
   const [profile, setProfile] = useState<any>(null);
+  const [profileLoaded, setProfileLoaded] = useState(false);
   const { theme, setTheme } = useTheme();
   const fullText = "Heyy there!! You can call me the Sherlock Holmes of data.";
   
@@ -49,6 +50,8 @@ const HeroSection = () => {
       setProfile(data);
     } catch (error) {
       console.error('Error loading profile:', error);
+    } finally {
+      setProfileLoaded(true);
     }
   };
 
@@ -183,11 +186,14 @@ const HeroSection = () => {
                     ? 'right-2 sm:right-4 transform-none' 
                     : 'left-2 sm:left-4 transform-none'
                 }`}>
-                  <img
-                    src={profile?.avatar_url || profilePhoto}
-                    alt={profile?.display_name || "Nirajan Khatiwada"}
-                    className="w-56 h-56 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full object-cover border-4 border-primary/20"
-                  />
+                  {profileLoaded && (
+                    <img
+                      src={profile?.avatar_url || profilePhoto}
+                      alt={profile?.display_name || "Nirajan Khatiwada"}
+                      className="w-56 h-56 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full object-cover border-4 border-primary/20"
+                      loading="eager"
+                    />
+                  )}
                 </div>
                 
                 {/* Theme Icons */}
