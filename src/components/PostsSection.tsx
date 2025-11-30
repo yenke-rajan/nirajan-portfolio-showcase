@@ -103,6 +103,8 @@ const PostsSection = () => {
                   src={featuredPost.image_url || "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=400&h=250&fit=crop"}
                   alt={featuredPost.title}
                   className="w-full h-64 lg:h-full object-cover hover:scale-110 transition-transform duration-500"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute top-4 left-4">
                   <Badge className="bg-accent text-white border-0">
@@ -179,6 +181,8 @@ const PostsSection = () => {
                   src={post.image_url || "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=400&h=250&fit=crop"}
                   alt={post.title}
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute top-3 left-3">
                   <Badge variant="secondary" className="glass">

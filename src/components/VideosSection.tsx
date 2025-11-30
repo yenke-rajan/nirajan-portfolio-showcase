@@ -80,6 +80,8 @@ const VideosSection = () => {
                   src={video.thumbnail_url || "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=400&h=225&fit=crop"}
                   alt={video.title}
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                  loading="lazy"
+                  decoding="async"
                 />
                 
                 {/* Play Overlay */}

@@ -113,6 +113,8 @@ const Post = () => {
                 src={post.image_url}
                 alt={post.title}
                 className="w-full h-[400px] object-cover"
+                loading="eager"
+                decoding="async"
               />
               {post.featured && (
                 <div className="absolute top-4 left-4">
