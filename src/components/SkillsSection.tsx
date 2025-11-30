@@ -106,6 +106,8 @@ const SkillsSection = () => {
                           src={skill.image_url} 
                           alt={skill.title}
                           className="w-10 h-10 sm:w-12 sm:h-12 object-contain opacity-90 group-hover:scale-110 transition-transform duration-300"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                     </div>

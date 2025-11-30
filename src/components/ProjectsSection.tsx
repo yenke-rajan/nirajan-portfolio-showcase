@@ -83,6 +83,8 @@ const ProjectsSection = () => {
                   src={project.image_url || "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=400&h=250&fit=crop"}
                   alt={project.title}
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                  loading="lazy"
+                  decoding="async"
                 />
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -101,7 +103,10 @@ const ProjectsSection = () => {
                       size="sm" 
                       variant="secondary" 
                       className="glass"
-                      onClick={() => window.open(project.github_url, '_blank')}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(project.github_url, '_blank');
+                      }}
                     >
                       <Github className="h-4 w-4" />
                     </Button>
@@ -110,7 +115,10 @@ const ProjectsSection = () => {
                     <Button 
                       size="sm" 
                       className="btn-glow bg-gradient-primary border-0"
-                      onClick={() => window.open(project.demo_url, '_blank')}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(project.demo_url, '_blank');
+                      }}
                     >
                       <Play className="h-4 w-4 mr-2" />
                       Try Demo
@@ -164,7 +172,10 @@ const ProjectsSection = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1 glass border-primary/30 hover:bg-primary/10"
-                      onClick={() => window.open(project.github_url, '_blank')}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(project.github_url, '_blank');
+                      }}
                     >
                       <Github className="h-4 w-4 mr-2" />
                       Code
@@ -174,7 +185,10 @@ const ProjectsSection = () => {
                     <Button 
                       size="sm" 
                       className="flex-1 btn-glow bg-gradient-primary border-0"
-                      onClick={() => window.open(project.demo_url, '_blank')}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(project.demo_url, '_blank');
+                      }}
                     >
                       <Play className="h-4 w-4 mr-2" />
                       Demo
