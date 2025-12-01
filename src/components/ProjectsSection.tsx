@@ -74,7 +74,7 @@ const ProjectsSection = () => {
           {projects.map((project, index) => (
             <Card 
               key={project.id}
-              className="glass hover-lift group cursor-pointer overflow-hidden fade-in-up"
+              className="glass hover-lift group overflow-hidden fade-in-up"
               style={{ animationDelay: `${index * 200}ms` }}
             >
               {/* Project Image */}
@@ -201,7 +201,7 @@ const ProjectsSection = () => {
                 </div>
 
                 {/* Hover Glow Effect */}
-                <div className={`absolute inset-0 ${getGradientClass(index)} opacity-0 group-hover:opacity-5 rounded-lg transition-opacity duration-300`}></div>
+                <div className={`absolute inset-0 ${getGradientClass(index)} opacity-0 group-hover:opacity-5 rounded-lg transition-opacity duration-300 pointer-events-none`}></div>
               </CardContent>
             </Card>
           ))}
