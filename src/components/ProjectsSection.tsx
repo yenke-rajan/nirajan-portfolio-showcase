@@ -104,8 +104,9 @@ const ProjectsSection = () => {
                       variant="secondary" 
                       className="glass"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
-                        window.open(project.github_url, '_blank');
+                        window.open(project.github_url, '_blank', 'noopener,noreferrer');
                       }}
                     >
                       <Github className="h-4 w-4" />
@@ -116,8 +117,9 @@ const ProjectsSection = () => {
                       size="sm" 
                       className="btn-glow bg-gradient-primary border-0"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
-                        window.open(project.demo_url, '_blank');
+                        window.open(project.demo_url, '_blank', 'noopener,noreferrer');
                       }}
                     >
                       <Play className="h-4 w-4 mr-2" />
@@ -173,8 +175,9 @@ const ProjectsSection = () => {
                       size="sm" 
                       className="flex-1 glass border-primary/30 hover:bg-primary/10"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
-                        window.open(project.github_url, '_blank');
+                        window.open(project.github_url, '_blank', 'noopener,noreferrer');
                       }}
                     >
                       <Github className="h-4 w-4 mr-2" />
@@ -186,8 +189,9 @@ const ProjectsSection = () => {
                       size="sm" 
                       className="flex-1 btn-glow bg-gradient-primary border-0"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
-                        window.open(project.demo_url, '_blank');
+                        window.open(project.demo_url, '_blank', 'noopener,noreferrer');
                       }}
                     >
                       <Play className="h-4 w-4 mr-2" />

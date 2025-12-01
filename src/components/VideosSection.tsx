@@ -61,7 +61,7 @@ const VideosSection = () => {
             <span className="text-gradient">Latest Videos</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Educational content about data science, machine learning, and programming tutorials
+            Browse the latest videos by me
           </p>
         </div>
 
