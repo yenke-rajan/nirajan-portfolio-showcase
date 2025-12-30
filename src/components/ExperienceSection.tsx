@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { Building2, Calendar, MapPin, ExternalLink } from 'lucide-react';
+import { Button } from './ui/button';
+import { Building2, Calendar, MapPin, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Experience {
@@ -18,10 +19,29 @@ interface Experience {
 
 const ExperienceSection = () => {
   const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [showAll, setShowAll] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
+  const INITIAL_DISPLAY_COUNT = 3;
 
   useEffect(() => {
     loadExperiences();
+    loadPhoneNumber();
   }, []);
+
+  const loadPhoneNumber = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('public_profiles')
+        .select('phone_number')
+        .limit(1)
+        .single();
+
+      if (error) throw error;
+      setPhoneNumber(data?.phone_number || null);
+    } catch (error) {
+      console.error('Error loading phone number:', error);
+    }
+  };
 
   const loadExperiences = async () => {
     try {
@@ -106,6 +126,16 @@ const ExperienceSection = () => {
     }
   };
 
+  const handleCollaborationClick = () => {
+    if (phoneNumber) {
+      const cleanedNumber = phoneNumber.replace(/\D/g, '');
+      window.open(`https://wa.me/${cleanedNumber}`, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const displayedExperiences = showAll ? experiences : experiences.slice(0, INITIAL_DISPLAY_COUNT);
+  const hasMore = experiences.length > INITIAL_DISPLAY_COUNT;
+
   return (
     <section id="experience" className="py-12 sm:py-16 lg:py-20 relative">
       <div className="container mx-auto px-4 sm:px-6">
@@ -126,9 +156,9 @@ const ExperienceSection = () => {
 
           {/* Experience Cards */}
           <div className="space-y-8 sm:space-y-12">
-            {experiences.map((exp, index) => (
+            {displayedExperiences.map((exp, index) => (
               <div 
-                key={index}
+                key={exp.id}
                 className={`fade-in-up flex items-center ${
                   index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'
                 }`}
@@ -204,9 +234,35 @@ const ExperienceSection = () => {
           </div>
         </div>
 
+        {/* See More Button */}
+        {hasMore && (
+          <div className="text-center mt-8 sm:mt-12 fade-in-up">
+            <Button
+              variant="outline"
+              className="glass border-primary/30 hover:bg-primary/10"
+              onClick={() => setShowAll(!showAll)}
+            >
+              {showAll ? (
+                <>
+                  <ChevronUp className="h-4 w-4 mr-2" />
+                  See Less
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-4 w-4 mr-2" />
+                  See More ({experiences.length - INITIAL_DISPLAY_COUNT} more)
+                </>
+              )}
+            </Button>
+          </div>
+        )}
+
         {/* Bottom CTA */}
         <div className="text-center mt-12 sm:mt-16 fade-in-up animation-delay-600">
-          <Card className="glass inline-block">
+          <Card 
+            className="glass inline-block cursor-pointer hover-lift"
+            onClick={handleCollaborationClick}
+          >
             <CardContent className="p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
                 <span className="text-base sm:text-lg text-gradient font-medium">Interested in collaborating?</span>
